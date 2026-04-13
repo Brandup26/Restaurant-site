@@ -3,134 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منيو مطعم النخبة - أطلب الآن</title>
+    <title>منيو مطعم النخبة الرسمي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --gold: #f2b705; --bg: #0a0a0a; --card: #1a1a1a; }
-        body { background: var(--bg); color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; padding-bottom: 100px; }
-        header { text-align: center; padding: 40px; background: linear-gradient(45deg, #000, #222); border-bottom: 2px solid var(--gold); }
-        .categories { display: flex; gap: 10px; padding: 15px; overflow-x: auto; sticky: top; background: var(--bg); }
-        .cat-btn { background: none; border: 1px solid var(--gold); color: var(--gold); padding: 8px 15px; border-radius: 20px; cursor: pointer; white-space: nowrap; }
-        .cat-btn.active { background: var(--gold); color: #000; }
+        * { box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
+        body { background-color: #0c0c0c; color: #fff; margin: 0; padding-bottom: 80px; }
         
-        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; padding: 15px; }
-        .item-card { background: var(--card); border-radius: 12px; overflow: hidden; border: 1px solid #333; position: relative; }
-        .item-img { width: 100%; height: 120px; object-fit: cover; }
-        .item-info { padding: 10px; }
-        .item-title { font-size: 1rem; margin: 0; }
-        .price { color: var(--gold); font-weight: bold; display: block; margin: 5px 0; }
-        .add-btn { background: var(--gold); border: none; width: 100%; padding: 8px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        /* هيدر احترافي */
+        header { background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=800'); background-size: cover; padding: 40px 20px; text-align: center; border-bottom: 3px solid #f2b705; }
+        .logo { width: 100px; height: 100px; border-radius: 50%; border: 2px solid #f2b705; margin-bottom: 10px; }
+        h1 { color: #f2b705; margin: 10px 0; font-size: 24px; }
+        .sub-text { color: #ccc; font-size: 14px; }
 
-        /* سلة المشتريات العائمة */
-        .cart-bar { position: fixed; bottom: 0; width: 100%; background: #222; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-top: 2px solid var(--gold); z-index: 1000; }
-        .view-cart { background: var(--gold); color: #000; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: bold; }
+        /* أقسام المنيو */
+        .categories { display: flex; overflow-x: auto; gap: 10px; padding: 20px; sticky: top; background: #0c0c0c; z-index: 10; }
+        .cat-item { background: #1a1a1a; border: 1px solid #f2b705; color: #f2b705; padding: 8px 20px; border-radius: 25px; white-space: nowrap; cursor: pointer; transition: 0.3s; }
+        .cat-item.active { background: #f2b705; color: #000; font-weight: bold; }
 
-        /* نافذة الفورم */
-        #order-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; padding: 20px; box-sizing: border-box; overflow-y: auto; }
-        .modal-content { background: #1a1a1a; padding: 20px; border-radius: 15px; max-width: 500px; margin: auto; }
-        input, textarea { width: 100%; padding: 12px; margin: 10px 0; background: #333; border: 1px solid #444; color: #fff; border-radius: 5px; }
-        .confirm-btn { background: #25d366; color: white; width: 100%; border: none; padding: 15px; font-size: 1.1rem; border-radius: 8px; cursor: pointer; }
+        /* كروت الطعام */
+        .menu-container { padding: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .food-card { background: #1a1a1a; border-radius: 15px; overflow: hidden; border: 1px solid #333; transition: 0.3s; }
+        .food-card img { width: 100%; height: 130px; object-fit: cover; }
+        .food-info { padding: 12px; }
+        .food-title { font-size: 15px; font-weight: bold; margin: 0; height: 40px; }
+        .food-price { color: #f2b705; font-weight: bold; display: block; margin: 10px 0; }
+        .add-to-cart { background: #f2b705; color: #000; border: none; width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+
+        /* سلة الطلبات العائمة */
+        .cart-float { position: fixed; bottom: 20px; left: 20px; right: 20px; background: #f2b705; color: #000; padding: 15px; border-radius: 12px; display: none; justify-content: space-between; align-items: center; font-weight: bold; box-shadow: 0 5px 20px rgba(0,0,0,0.5); z-index: 100; cursor: pointer; }
+
+        /* نافذة بيانات العميل */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; padding: 20px; }
+        .modal-content { background: #1a1a1a; padding: 25px; border-radius: 20px; border: 1px solid #f2b705; max-width: 450px; margin: 40px auto; }
+        input, textarea { width: 100%; padding: 12px; margin: 10px 0; background: #222; border: 1px solid #444; color: #fff; border-radius: 8px; }
+        .send-btn { background: #25d366; color: #fff; border: none; width: 100%; padding: 15px; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        
+        @media (max-width: 400px) { .menu-container { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
 <header>
-    <img src="logo.png" alt="لوجو المطعم" style="height: 80px; margin-bottom: 10px;">
+    <img src="https://via.placeholder.com/100/f2b705/000?text=Logo" class="logo" alt="لوجو المطعم">
     <h1>مطعم النخبة</h1>
-    <p>كريبات • بروست • بوكسات</p>
+    <p class="sub-text">أقوى كريبات وبروست في المنطقة</p>
 </header>
 
 <div class="categories">
-    <button class="cat-btn active">الكل</button>
-    <button class="cat-btn">كريبات</button>
-    <button class="cat-btn">بروست</button>
-    <button class="cat-btn">بوكسات</button>
+    <div class="cat-item active" onclick="filterMenu('الكل')">الكل</div>
+    <div class="cat-item" onclick="filterMenu('كريبات')">كريبات</div>
+    <div class="cat-item" onclick="filterMenu('بروست')">بروست</div>
+    <div class="cat-item" onclick="filterMenu('بوكسات')">بوكسات</div>
 </div>
 
-<div class="menu-grid" id="menu">
-    <div class="item-card" data-category="كريبات">
-        <img src="https://images.unsplash.com/photo-1519676867240-f031ee04a703?w=400" class="item-img">
-        <div class="item-info">
-            <h3 class="item-title">كريب زنجر سوبر</h3>
-            <span class="price">120 ج.م</span>
-            <button class="add-btn" onclick="addToCart('كريب زنجر سوبر', 120)">إضافة للطلب</button>
+<div class="menu-container" id="menu">
+    <div class="food-card" data-cat="كريبات">
+        <img src="https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=400" alt="كريب">
+        <div class="food-info">
+            <p class="food-title">كريب زنجر سوبر حار</p>
+            <span class="food-price">110 ج.م</span>
+            <button class="add-to-cart" onclick="addToCart('كريب زنجر سوبر', 110)">إضافة للطلب</button>
         </div>
     </div>
-    <div class="item-card" data-category="بروست">
-        <img src="https://images.unsplash.com/photo-1626645738196-c2a7c8d08f58?w=400" class="item-img">
-        <div class="item-info">
-            <h3 class="item-title">وجبة بروست 4 قطع</h3>
-            <span class="price">250 ج.م</span>
-            <button class="add-btn" onclick="addToCart('وجبة بروست 4 قطع', 250)">إضافة للطلب</button>
+    <div class="food-card" data-cat="بروست">
+        <img src="https://images.unsplash.com/photo-1626645738196-c2a7c8d08f58?w=400" alt="بروست">
+        <div class="food-info">
+            <p class="food-title">وجبة بروست 4 قطع</p>
+            <span class="food-price">220 ج.م</span>
+            <button class="add-to-cart" onclick="addToCart('وجبة بروست 4 قطع', 220)">إضافة للطلب</button>
         </div>
     </div>
 </div>
 
-<div class="cart-bar" id="cart-bar" style="display: none;">
-    <div>الطلبات: <span id="cart-count">0</span> | الإجمالي: <span id="cart-total">0</span> ج.م</div>
-    <button class="view-cart" onclick="showModal()">تأكيد الطلب</button>
+<div class="cart-float" id="cartFloat" onclick="openOrderModal()">
+    <span><i class="fas fa-shopping-basket"></i> عرض السلة (<span id="count">0</span>)</span>
+    <span>الإجمالي: <span id="total">0</span> ج.م</span>
 </div>
 
-<div id="order-modal">
+<div class="modal" id="orderModal">
     <div class="modal-content">
-        <h2 style="color:var(--gold)">بيانات التوصيل</h2>
-        <div id="order-summary" style="margin-bottom: 15px; font-size: 0.9rem; border-bottom: 1px solid #333; padding-bottom: 10px;"></div>
-        <input type="text" id="cust-name" placeholder="اسمك الكريم">
-        <input type="tel" id="cust-phone" placeholder="رقم الموبايل">
-        <textarea id="cust-address" placeholder="عنوان التوصيل بالتفصيل"></textarea>
-        <button class="confirm-btn" onclick="sendToWhatsApp()">
-            <i class="fab fa-whatsapp"></i> إرسال الطلب عبر واتساب
+        <h2 style="color:#f2b705; margin-top:0;">تأكيد الطلب</h2>
+        <div id="summary" style="font-size: 14px; margin-bottom: 15px; color: #aaa;"></div>
+        <input type="text" id="name" placeholder="الاسم بالكامل" required>
+        <input type="tel" id="phone" placeholder="رقم الموبايل" required>
+        <textarea id="address" placeholder="العنوان بالتفصيل (المنطقة، الشارع، علامة مميزة)" rows="3" required></textarea>
+        <button class="send-btn" onclick="submitToWhatsapp()">
+            <i class="fab fa-whatsapp"></i> إرسال عبر واتساب
         </button>
-        <button onclick="hideModal()" style="background:none; border:none; color:#888; margin-top:15px; cursor:pointer;">إلغاء</button>
+        <button onclick="closeModal()" style="background:none; border:none; color:#888; width:100%; margin-top:15px; cursor:pointer;">رجوع للمنيو</button>
     </div>
 </div>
 
 <script>
     let cart = [];
-    let total = 0;
+    let totalPrice = 0;
 
-    function addToCart(name, price) {
-        cart.push({name, price});
-        total += price;
-        updateCartBar();
+    function addToCart(item, price) {
+        cart.push({item, price});
+        totalPrice += price;
+        document.getElementById('cartFloat').style.display = 'flex';
+        document.getElementById('count').innerText = cart.length;
+        document.getElementById('total').innerText = totalPrice;
     }
 
-    function updateCartBar() {
-        document.getElementById('cart-bar').style.display = 'flex';
-        document.getElementById('cart-count').innerText = cart.length;
-        document.getElementById('cart-total').innerText = total;
+    function openOrderModal() {
+        document.getElementById('orderModal').style.display = 'block';
+        document.getElementById('summary').innerText = "لقد اخترت " + cart.length + " أصناف بمجموع " + totalPrice + " ج.م";
     }
 
-    function showModal() {
-        document.getElementById('order-modal').style.display = 'block';
-        let summary = "طلباتك: " + cart.map(i => i.name).join(' ، ');
-        document.getElementById('order-summary').innerText = summary;
+    function closeModal() {
+        document.getElementById('orderModal').style.display = 'none';
     }
 
-    function hideModal() {
-        document.getElementById('order-modal').style.display = 'none';
-    }
+    function submitToWhatsapp() {
+        const name = document.getElementById('name').value;
+        const phone = document.getElementById('phone').value;
+        const address = document.getElementById('address').value;
 
-    function sendToWhatsApp() {
-        const name = document.getElementById('cust-name').value;
-        const phone = document.getElementById('cust-phone').value;
-        const address = document.getElementById('cust-address').value;
-        
         if(!name || !phone || !address) {
-            alert("برجاء ملء كافة البيانات");
+            alert("برجاء إكمال البيانات!");
             return;
         }
 
-        let itemsText = cart.map(i => `- ${i.name} (${i.price} ج.م)`).join('%0A');
-        let message = `*طلب جديد من المنيو الإلكتروني*%0A%0A` +
-                      `*الاسم:* ${name}%0A` +
-                      `*الموبايل:* ${phone}%0A` +
-                      `*العنوان:* ${address}%0A%0A` +
-                      `*الطلبات:*%0A${itemsText}%0A%0A` +
-                      `*الإجمالي:* ${total} ج.م`;
+        let orderDetails = cart.map(i => `• ${i.item} (${i.price} ج.م)`).join('%0A');
+        let msg = `*طلب جديد من المنيو*%0A%0A*العميل:* ${name}%0A*رقم الهاتف:* ${phone}%0A*العنوان:* ${address}%0A%0A*الأصناف:*%0A${orderDetails}%0A%0A*الإجمالي:* ${totalPrice} ج.م`;
+        
+        window.open(`https://wa.me/201019482687?text=${msg}`); // غير الرقم لرقم المطعم
+    }
 
-        const whatsappNumber = "201019482687"; // ضع رقم المطعم هنا
-        window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
+    function filterMenu(cat) {
+        let cards = document.querySelectorAll('.food-card');
+        document.querySelectorAll('.cat-item').forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+        
+        cards.forEach(card => {
+            if(cat === 'الكل' || card.getAttribute('data-cat') === cat) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
     }
 </script>
 
