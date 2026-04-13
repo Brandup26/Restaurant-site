@@ -3,192 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-Menu | مطعم النخبة</title>
+    <title>منيو مطعم النخبة - أطلب الآن</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root {
-            --gold: #f2b705;
-            --bg-black: #0a0a0a;
-            --card-bg: #141414;
-            --text-white: #ffffff;
-        }
-
-        body {
-            background-color: var(--bg-black);
-            color: var(--text-white);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0; padding: 0;
-        }
-
-        /* الهيدر */
-        header {
-            text-align: center;
-            padding: 50px 20px;
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=800&q=80');
-            background-size: cover;
-            background-position: center;
-            border-bottom: 2px solid var(--gold);
-        }
-
-        header h1 { margin: 0; font-size: 2.5rem; letter-spacing: 2px; }
-        header p { color: var(--gold); font-weight: bold; }
-
-        /* أزرار الفلترة */
-        .categories {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            padding: 20px;
-            overflow-x: auto;
-            position: sticky;
-            top: 0;
-            background: var(--bg-black);
-            z-index: 100;
-        }
-
-        .cat-btn {
-            background: none;
-            border: 1px solid var(--gold);
-            color: var(--gold);
-            padding: 8px 20px;
-            border-radius: 20px;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: 0.3s;
-        }
-
-        .cat-btn.active, .cat-btn:hover {
-            background: var(--gold);
-            color: #000;
-        }
-
-        /* شبكة المنتجات */
-        .menu-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            padding: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .menu-item {
-            background: var(--card-bg);
-            border-radius: 15px;
-            overflow: hidden;
-            border: 1px solid #222;
-            transition: 0.4s;
-        }
-
-        .menu-item:hover {
-            transform: translateY(-10px);
-            border-color: var(--gold);
-            box-shadow: 0 10px 20px rgba(242, 183, 5, 0.2);
-        }
-
-        .item-img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-
-        .item-info { padding: 15px; }
-        .item-title { font-size: 1.2rem; font-weight: bold; margin: 0; }
-        .item-desc { color: #888; font-size: 0.9rem; margin: 10px 0; min-height: 40px; }
+        :root { --gold: #f2b705; --bg: #0a0a0a; --card: #1a1a1a; }
+        body { background: var(--bg); color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; padding-bottom: 100px; }
+        header { text-align: center; padding: 40px; background: linear-gradient(45deg, #000, #222); border-bottom: 2px solid var(--gold); }
+        .categories { display: flex; gap: 10px; padding: 15px; overflow-x: auto; sticky: top; background: var(--bg); }
+        .cat-btn { background: none; border: 1px solid var(--gold); color: var(--gold); padding: 8px 15px; border-radius: 20px; cursor: pointer; white-space: nowrap; }
+        .cat-btn.active { background: var(--gold); color: #000; }
         
-        .item-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 15px;
-        }
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; padding: 15px; }
+        .item-card { background: var(--card); border-radius: 12px; overflow: hidden; border: 1px solid #333; position: relative; }
+        .item-img { width: 100%; height: 120px; object-fit: cover; }
+        .item-info { padding: 10px; }
+        .item-title { font-size: 1rem; margin: 0; }
+        .price { color: var(--gold); font-weight: bold; display: block; margin: 5px 0; }
+        .add-btn { background: var(--gold); border: none; width: 100%; padding: 8px; border-radius: 5px; cursor: pointer; font-weight: bold; }
 
-        .price { color: var(--gold); font-size: 1.3rem; font-weight: bold; }
+        /* سلة المشتريات العائمة */
+        .cart-bar { position: fixed; bottom: 0; width: 100%; background: #222; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-top: 2px solid var(--gold); z-index: 1000; }
+        .view-cart { background: var(--gold); color: #000; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: bold; }
 
-        .order-btn {
-            background: #25d366;
-            color: white;
-            text-decoration: none;
-            padding: 8px 15px;
-            border-radius: 8px;
-            font-size: 0.8rem;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        footer { text-align: center; padding: 30px; color: #555; font-size: 0.8rem; }
-
-        @media (max-width: 600px) {
-            header h1 { font-size: 1.8rem; }
-            .menu-grid { grid-template-columns: 1fr; }
-        }
+        /* نافذة الفورم */
+        #order-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; padding: 20px; box-sizing: border-box; overflow-y: auto; }
+        .modal-content { background: #1a1a1a; padding: 20px; border-radius: 15px; max-width: 500px; margin: auto; }
+        input, textarea { width: 100%; padding: 12px; margin: 10px 0; background: #333; border: 1px solid #444; color: #fff; border-radius: 5px; }
+        .confirm-btn { background: #25d366; color: white; width: 100%; border: none; padding: 15px; font-size: 1.1rem; border-radius: 8px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>مطعم النخبة</h1>
-        <p>تجربة طعام لا تُنسى</p>
-    </header>
+<header>
+    <img src="logo.png" alt="لوجو المطعم" style="height: 80px; margin-bottom: 10px;">
+    <h1>مطعم النخبة</h1>
+    <p>كريبات • بروست • بوكسات</p>
+</header>
 
-    <div class="categories">
-        <button class="cat-btn active">الكل</button>
-        <button class="cat-btn">أطباق رئيسية</button>
-        <button class="cat-btn">مقبلات</button>
-        <button class="cat-btn">مشروبات</button>
+<div class="categories">
+    <button class="cat-btn active">الكل</button>
+    <button class="cat-btn">كريبات</button>
+    <button class="cat-btn">بروست</button>
+    <button class="cat-btn">بوكسات</button>
+</div>
+
+<div class="menu-grid" id="menu">
+    <div class="item-card" data-category="كريبات">
+        <img src="https://images.unsplash.com/photo-1519676867240-f031ee04a703?w=400" class="item-img">
+        <div class="item-info">
+            <h3 class="item-title">كريب زنجر سوبر</h3>
+            <span class="price">120 ج.م</span>
+            <button class="add-btn" onclick="addToCart('كريب زنجر سوبر', 120)">إضافة للطلب</button>
+        </div>
     </div>
+    <div class="item-card" data-category="بروست">
+        <img src="https://images.unsplash.com/photo-1626645738196-c2a7c8d08f58?w=400" class="item-img">
+        <div class="item-info">
+            <h3 class="item-title">وجبة بروست 4 قطع</h3>
+            <span class="price">250 ج.م</span>
+            <button class="add-btn" onclick="addToCart('وجبة بروست 4 قطع', 250)">إضافة للطلب</button>
+        </div>
+    </div>
+</div>
 
-    <div class="menu-grid">
+<div class="cart-bar" id="cart-bar" style="display: none;">
+    <div>الطلبات: <span id="cart-count">0</span> | الإجمالي: <span id="cart-total">0</span> ج.م</div>
+    <button class="view-cart" onclick="showModal()">تأكيد الطلب</button>
+</div>
+
+<div id="order-modal">
+    <div class="modal-content">
+        <h2 style="color:var(--gold)">بيانات التوصيل</h2>
+        <div id="order-summary" style="margin-bottom: 15px; font-size: 0.9rem; border-bottom: 1px solid #333; padding-bottom: 10px;"></div>
+        <input type="text" id="cust-name" placeholder="اسمك الكريم">
+        <input type="tel" id="cust-phone" placeholder="رقم الموبايل">
+        <textarea id="cust-address" placeholder="عنوان التوصيل بالتفصيل"></textarea>
+        <button class="confirm-btn" onclick="sendToWhatsApp()">
+            <i class="fab fa-whatsapp"></i> إرسال الطلب عبر واتساب
+        </button>
+        <button onclick="hideModal()" style="background:none; border:none; color:#888; margin-top:15px; cursor:pointer;">إلغاء</button>
+    </div>
+</div>
+
+<script>
+    let cart = [];
+    let total = 0;
+
+    function addToCart(name, price) {
+        cart.push({name, price});
+        total += price;
+        updateCartBar();
+    }
+
+    function updateCartBar() {
+        document.getElementById('cart-bar').style.display = 'flex';
+        document.getElementById('cart-count').innerText = cart.length;
+        document.getElementById('cart-total').innerText = total;
+    }
+
+    function showModal() {
+        document.getElementById('order-modal').style.display = 'block';
+        let summary = "طلباتك: " + cart.map(i => i.name).join(' ، ');
+        document.getElementById('order-summary').innerText = summary;
+    }
+
+    function hideModal() {
+        document.getElementById('order-modal').style.display = 'none';
+    }
+
+    function sendToWhatsApp() {
+        const name = document.getElementById('cust-name').value;
+        const phone = document.getElementById('cust-phone').value;
+        const address = document.getElementById('cust-address').value;
         
-        <div class="menu-item">
-            <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=500&q=80" alt="برجر" class="item-img">
-            <div class="item-info">
-                <h3 class="item-title">جراند برجر ذهبي</h3>
-                <p class="item-desc">لحم بقري مشوي على اللهب مع جبنة شيدر سائلة وصوص النخبة الخاص.</p>
-                <div class="item-footer">
-                    <span class="price">180 ج.م</span>
-                    <a href="https://wa.me/201019482687?text=أريد طلب جراند برجر ذهبي" class="order-btn">
-                        <i class="fab fa-whatsapp"></i> اطلب الآن
-                    </a>
-                </div>
-            </div>
-        </div>
+        if(!name || !phone || !address) {
+            alert("برجاء ملء كافة البيانات");
+            return;
+        }
 
-        <div class="menu-item">
-            <img src="https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?auto=format&fit=crop&w=500&q=80" alt="بيتزا" class="item-img">
-            <div class="item-info">
-                <h3 class="item-title">بيتزا رويال</h3>
-                <p class="item-desc">عجينة إيطالية خفيفة مغطاة بأجود أنواع السلامي والموتزاريلا الطبيعية.</p>
-                <div class="item-footer">
-                    <span class="price">220 ج.م</span>
-                    <a href="https://wa.me/201019482687?text=أريد طلب بيتزا رويال" class="order-btn">
-                        <i class="fab fa-whatsapp"></i> اطلب الآن
-                    </a>
-                </div>
-            </div>
-        </div>
+        let itemsText = cart.map(i => `- ${i.name} (${i.price} ج.م)`).join('%0A');
+        let message = `*طلب جديد من المنيو الإلكتروني*%0A%0A` +
+                      `*الاسم:* ${name}%0A` +
+                      `*الموبايل:* ${phone}%0A` +
+                      `*العنوان:* ${address}%0A%0A` +
+                      `*الطلبات:*%0A${itemsText}%0A%0A` +
+                      `*الإجمالي:* ${total} ج.م`;
 
-        <div class="menu-item">
-            <img src="https://images.unsplash.com/photo-1544148103-0773bf10d330?auto=format&fit=crop&w=500&q=80" alt="مشروب" class="item-img">
-            <div class="item-info">
-                <h3 class="item-title">موهيتو منعش</h3>
-                <p class="item-desc">مزيج من الليمون الطازج والنعناع مع قطع الثلج المجروش.</p>
-                <div class="item-footer">
-                    <span class="price">65 ج.م</span>
-                    <a href="https://wa.me/201019482687?text=أريد طلب موهيتو منعش" class="order-btn">
-                        <i class="fab fa-whatsapp"></i> اطلب الآن
-                    </a>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <footer>
-        <p>جميع الحقوق محفوظة © مطعم النخبة 2026</p>
-        <p>Designed by <span style="color:var(--gold)">Anas</span></p>
-    </footer>
+        const whatsappNumber = "201019482687"; // ضع رقم المطعم هنا
+        window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
+    }
+</script>
 
 </body>
 </html>
