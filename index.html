@@ -6,150 +6,143 @@
     <title>كشري وحواوشي أولاد زكريا</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@700;800;900&display=swap" rel="stylesheet">
     <style>
-        :root { --brand-red: #800000; --brand-orange: #f27e27; --brand-green: #73b32d; --gold: #ffc107; }
+        :root { --orange: #f27e27; --green: #73b32d; --gold: #ffc107; --dark: #121212; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', sans-serif; }
-        body { background-color: #0f0f0f; color: white; padding-bottom: 100px; }
+        body { background-color: var(--dark); color: white; padding-bottom: 100px; }
 
-        /* الهيدر الاحترافي الجديد */
-        header { 
-            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('logo.jpg');
-            background-size: cover; padding: 40px 20px; text-align: center;
-            border-bottom: 5px solid var(--brand-orange);
+        /* الهيدر الاحترافي المعدل */
+        .hero-header { 
+            background: linear-gradient(180deg, rgba(0,0,0,0.85) 0%, var(--dark) 100%), url('logo.jpg');
+            background-size: cover; background-position: center;
+            padding: 60px 20px 40px; text-align: center;
+            border-bottom: 4px solid var(--orange);
+            position: relative;
         }
 
-        /* اللوجو الدائري الصغير المطلب */
-        .logo-circle {
-            width: 110px; height: 110px; 
+        .logo-box {
+            width: 120px; height: 120px; 
             background: #fff; border-radius: 50%; 
-            margin: 0 auto 15px; overflow: hidden;
-            border: 4px solid var(--gold);
-            box-shadow: 0 0 20px rgba(255, 193, 7, 0.5);
+            margin: 0 auto 20px; overflow: hidden;
+            border: 5px solid var(--gold);
+            box-shadow: 0 0 30px rgba(255, 193, 7, 0.4); /* تأثير التوهج الذهبي */
             display: flex; align-items: center; justify-content: center;
         }
-        .logo-circle img { width: 85%; height: auto; }
+        .logo-box img { width: 85%; height: auto; }
 
-        /* الاسم الضخم العريض */
-        .brand-title { 
-            font-size: 32px; font-weight: 900; color: var(--gold);
-            text-shadow: 2px 2px 4px rgba(0,0,0,1);
-            margin-bottom: 5px;
+        .main-title { 
+            font-size: 36px; font-weight: 900; color: var(--gold);
+            text-shadow: 3px 3px 5px rgba(0,0,0,0.8);
+            margin-bottom: 10px; line-height: 1.2;
         }
 
         /* تنسيق الأقسام */
-        .section-tag { 
-            background: var(--brand-green); color: white; padding: 10px 30px; 
-            width: fit-content; margin: 30px auto 15px; 
-            border-radius: 50px; font-size: 20px; font-weight: bold;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        .section-header { 
+            background: var(--green); color: white; padding: 12px 40px; 
+            width: fit-content; margin: 35px auto 15px; 
+            border-radius: 50px; font-size: 22px; font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
         }
 
-        .menu-grid { padding: 0 15px; }
-        .item-card { 
-            background: #1a1a1a; border-radius: 12px; 
-            padding: 15px; display: flex; justify-content: space-between; align-items: center; 
-            margin-bottom: 10px; border-right: 5px solid var(--brand-orange);
+        .container { padding: 0 15px; max-width: 600px; margin: 0 auto; }
+        .menu-card { 
+            background: #1e1e1e; border-radius: 15px; 
+            padding: 18px; display: flex; justify-content: space-between; align-items: center; 
+            margin-bottom: 12px; border-right: 6px solid var(--orange);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
         }
-        .item-info { flex: 1; }
-        .item-name { font-size: 17px; font-weight: 800; color: #fff; }
-        .item-sub { font-size: 12px; color: #aaa; margin-top: 3px; }
-
-        .item-price { color: var(--gold); font-weight: 900; font-size: 20px; margin: 0 15px; }
-        .add-btn { 
-            background: var(--brand-orange); color: white; border: none; 
-            width: 40px; height: 40px; border-radius: 50%; 
-            font-size: 24px; cursor: pointer;
+        .info { flex: 1; }
+        .name { font-size: 18px; font-weight: 800; color: #fff; }
+        .sub { font-size: 13px; color: #999; margin-top: 4px; font-weight: 600; }
+        .price { color: var(--gold); font-weight: 900; font-size: 22px; margin: 0 15px; }
+        
+        .add-icon { 
+            background: var(--orange); color: white; border: none; 
+            width: 42px; height: 42px; border-radius: 50%; 
+            font-size: 26px; cursor: pointer; transition: 0.2s;
         }
+        .add-icon:active { transform: scale(0.9); }
 
-        /* سلة الواتساب */
-        .cart-bar { 
+        /* بار سلة الشراء */
+        .order-bar { 
             position: fixed; bottom: 0; width: 100%; background: #fff; 
-            padding: 20px; display: none; justify-content: space-between; 
-            border-top: 4px solid var(--brand-green); z-index: 1000; border-radius: 20px 20px 0 0;
+            padding: 20px; display: none; justify-content: space-between; align-items: center;
+            border-top: 5px solid var(--green); z-index: 1000; border-radius: 25px 25px 0 0;
         }
-        .cart-bar span { color: #000; font-weight: 800; font-size: 18px; }
-        .go-btn { background: var(--brand-green); color: white; border: none; padding: 10px 20px; border-radius: 10px; font-weight: bold; }
+        .order-bar span { color: #000; font-weight: 900; font-size: 20px; }
+        .btn-send { background: var(--green); color: white; border: none; padding: 12px 25px; border-radius: 12px; font-weight: 800; font-size: 16px; }
 
-        #order-form { display: none; position: fixed; top: 0; background: #fff; width: 100%; height: 100%; z-index: 2000; padding: 40px 20px; color: #000; }
-        input, textarea { width: 100%; padding: 15px; margin: 10px 0; border: 1px solid #ddd; border-radius: 10px; font-size: 16px; }
+        /* نموذج البيانات */
+        #form-overlay { display: none; position: fixed; top: 0; background: #fff; width: 100%; height: 100%; z-index: 2000; padding: 50px 25px; color: #000; }
+        .input-field { width: 100%; padding: 18px; margin: 12px 0; border: 2px solid #eee; border-radius: 15px; font-size: 16px; font-weight: 700; }
     </style>
 </head>
 <body>
 
-<header>
-    <div class="logo-circle"><img src="logo.jpg" alt="Logo"></div>
-    <h1 class="brand-title">كشري وحواوشي أولاد زكريا</h1>
-</header>
-
-<div class="menu-grid">
-    <div class="section-tag">كشري</div>
-    <div class="item-card"><div class="item-info"><p class="item-name">كشري صغير</p></div><div class="item-price">25ج</div><button class="add-btn" onclick="add('كشري صغير', 25)">+</button></div>
-    <div class="item-card"><div class="item-info"><p class="item-name">كشري جامبو</p></div><div class="item-price">35ج</div><button class="add-btn" onclick="add('كشري جامبو', 35)">+</button></div>
-    <div class="item-card"><div class="item-info"><p class="item-name">كشري سبيشيال</p></div><div class="item-price">45ج</div><button class="add-btn" onclick="add('كشري سبيشيال', 45)">+</button></div>
-
-    <div class="section-tag">كشري بالكبدة</div>
-    <div class="item-card"><div class="item-info"><p class="item-name">كشري صغير كبدة</p></div><div class="item-price">35ج</div><button class="add-btn" onclick="add('كشري صغير كبدة', 35)">+</button></div>
-    <div class="item-card"><div class="item-info"><p class="item-name">كشري جامبو كبدة</p></div><div class="item-price">50ج</div><button class="add-btn" onclick="add('كشري جامبو كبدة', 50)">+</button></div>
-    <div class="item-card"><div class="item-info"><p class="item-name">كشري سبيشيال كبدة</p></div><div class="item-price">60ج</div><button class="add-btn" onclick="add('كشري سبيشيال كبدة', 60)">+</button></div>
-
-    <div class="section-tag">الطواجن</div>
-    <div class="item-card"><div class="item-info"><p class="item-name">لحمة مفرومة</p></div><div class="item-price">35ج</div><button class="add-btn" onclick="add('طاجن لحمة', 35)">+</button></div>
-    <div class="item-card"><div class="item-info"><p class="item-name">طاجن فراخ</p></div><div class="item-price">45ج</div><button class="add-btn" onclick="add('طاجن فراخ', 45)">+</button></div>
-    <div class="item-card"><div class="item-info"><p class="item-name">لحمة ميكس كبدة</p></div><div class="item-price">50ج</div><button class="add-btn" onclick="add('طاجن ميكس كبدة', 50)">+</button></div>
-    <div class="item-card"><div class="item-info"><p class="item-name">لحمة ميكس كشري</p></div><div class="item-price">50ج</div><button class="add-btn" onclick="add('طاجن ميكس كشري', 50)">+</button></div>
-    <div class="item-card"><div class="item-info"><p class="item-name">لحمة ميكس</p></div><div class="item-price">60ج</div><button class="add-btn" onclick="add('طاجن لحمة ميكس', 60)">+</button></div>
-    <div class="item-card"><div class="item-info"><p class="item-name">فراخ ميكس كشري</p></div><div class="item-price">55ج</div><button class="add-btn" onclick="add('فراخ ميكس كشري', 55)">+</button></div>
-    <div class="item-card"><div class="item-info"><p class="item-name">فراخ ميكس كبدة</p></div><div class="item-price">60ج</div><button class="add-btn" onclick="add('فراخ ميكس كبدة', 60)">+</button></div>
-    <div class="item-card"><div class="item-info"><p class="item-name">فراخ ميكس</p></div><div class="item-price">65ج</div><button class="add-btn" onclick="add('طاجن فراخ ميكس', 65)">+</button></div>
-
-    <div class="section-tag">الساندوتشات</div>
-    <div class="item-card"><div class="item-info"><p class="item-name">رغيف حواوشي</p></div><div class="item-price">30ج</div><button class="add-btn" onclick="add('رغيف حواوشي', 30)">+</button></div>
-    <div class="item-card"><div class="item-info"><p class="item-name">ساندوتش كبدة</p></div><div class="item-price">15ج</div><button class="add-btn" onclick="add('ساندوتش كبدة', 15)">+</button></div>
-
-    <div class="section-tag">وجبات</div>
-    <div class="item-card"><div class="item-info"><p class="item-name">ربع كبدة شرايح</p><p class="item-sub">عيش . طحينة . مخلل</p></div><div class="item-price">85ج</div><button class="add-btn" onclick="add('وجبة كبدة شرايح', 85)">+</button></div>
-
-    <div class="section-tag">الإضافات</div>
-    <div class="item-card"><div class="item-info"><p class="item-name">كبدة ع الكشري</p></div><div class="item-price">15ج</div><button class="add-btn" onclick="add('إضافة كبدة', 15)">+</button></div>
-    <div class="item-card"><div class="item-info"><p class="item-name">تقلية</p></div><div class="item-price">10ج</div><button class="add-btn" onclick="add('إضافة تقلية', 10)">+</button></div>
-    <div class="item-card"><div class="item-info"><p class="item-name">عدس وحمص</p></div><div class="item-price">10ج</div><button class="add-btn" onclick="add('إضافة عدس وحمص', 10)">+</button></div>
-    <div class="item-card"><div class="item-info"><p class="item-name">توست</p></div><div class="item-price">5ج</div><button class="add-btn" onclick="add('إضافة توست', 5)">+</button></div>
-    <div class="item-card"><div class="item-info"><p class="item-name">خيار</p></div><div class="item-price">5ج</div><button class="add-btn" onclick="add('إضافة خيار', 5)">+</button></div>
-    <div class="item-card"><div class="item-info"><p class="item-name">صلصة</p></div><div class="item-price">5ج</div><button class="add-btn" onclick="add('إضافة صلصة', 5)">+</button></div>
-    <div class="item-card"><div class="item-info"><p class="item-name">بيبسي</p></div><div class="item-price">20ج</div><button class="add-btn" onclick="add('بيبسي', 20)">+</button></div>
-    <div class="item-card"><div class="item-info"><p class="item-name">مياه معدنية</p></div><div class="item-price">7ج</div><button class="add-btn" onclick="add('مياه معدنية', 7)">+</button></div>
-
-    <div class="section-tag">الحلو</div>
-    <div class="item-card"><div class="item-info"><p class="item-name">أرز باللبن سادة</p></div><div class="item-price">25ج</div><button class="add-btn" onclick="add('أرز بلبن', 25)">+</button></div>
+<div class="hero-header">
+    <div class="logo-box"><img src="logo.jpg" alt="Logo"></div>
+    <h1 class="main-title">كشري وحواوشي<br>أولاد زكريا</h1>
 </div>
 
-<div class="cart-bar" id="cartBar">
-    <span>إجمالي الطلب: <b id="totalPrice">0 ج</b></span>
-    <button class="go-btn" onclick="showForm()">اطلب واتساب ✅</button>
+<div class="container">
+    <div class="section-header">كشري</div>
+    <div class="menu-card"><div class="info"><p class="name">كشري صغير</p></div><div class="price">25ج</div><button class="add-icon" onclick="add('كشري صغير', 25)">+</button></div>
+    <div class="menu-card"><div class="info"><p class="name">كشري جامبو</p></div><div class="price">35ج</div><button class="add-icon" onclick="add('كشري جامبو', 35)">+</button></div>
+    <div class="menu-card"><div class="info"><p class="name">كشري سبيشيال</p></div><div class="price">45ج</div><button class="add-icon" onclick="add('كشري سبيشيال', 45)">+</button></div>
+
+    <div class="section-header">كشري بالكبدة</div>
+    <div class="menu-card"><div class="info"><p class="name">كشري صغير كبدة</p></div><div class="price">35ج</div><button class="add-icon" onclick="add('كشري صغير كبدة', 35)">+</button></div>
+    <div class="menu-card"><div class="info"><p class="name">كشري جامبو كبدة</p></div><div class="price">50ج</div><button class="add-icon" onclick="add('كشري جامبو كبدة', 50)">+</button></div>
+    <div class="menu-card"><div class="info"><p class="name">كشري سبيشيال كبدة</p></div><div class="price">60ج</div><button class="add-icon" onclick="add('كشري سبيشيال كبدة', 60)">+</button></div>
+
+    <div class="section-header">الطواجن</div>
+    <div class="menu-card"><div class="info"><p class="name">لحمة مفرومة</p></div><div class="price">35ج</div><button class="add-icon" onclick="add('طاجن لحمة', 35)">+</button></div>
+    <div class="menu-card"><div class="info"><p class="name">طاجن فراخ</p></div><div class="price">45ج</div><button class="add-icon" onclick="add('طاجن فراخ', 45)">+</button></div>
+    <div class="menu-card"><div class="info"><p class="name">لحمة ميكس كبدة</p></div><div class="price">50ج</div><button class="add-icon" onclick="add('طاجن ميكس كبدة', 50)">+</button></div>
+    <div class="menu-card"><div class="info"><p class="name">لحمة ميكس كشري</p></div><div class="price">50ج</div><button class="add-icon" onclick="add('طاجن ميكس كشري', 50)">+</button></div>
+    <div class="menu-card"><div class="info"><p class="name">لحمة ميكس</p></div><div class="price">60ج</div><button class="add-icon" onclick="add('طاجن ميكس', 60)">+</button></div>
+    <div class="menu-card"><div class="info"><p class="name">فراخ ميكس كشري</p></div><div class="price">55ج</div><button class="add-icon" onclick="add('فراخ كشري', 55)">+</button></div>
+    <div class="menu-card"><div class="info"><p class="name">فراخ ميكس كبدة</p></div><div class="price">60ج</div><button class="add-icon" onclick="add('فراخ كبدة', 60)">+</button></div>
+    <div class="menu-card"><div class="info"><p class="name">فراخ ميكس</p></div><div class="price">65ج</div><button class="add-icon" onclick="add('طاجن فراخ ميكس', 65)">+</button></div>
+
+    <div class="section-header">وجبات وساندوتشات</div>
+    <div class="menu-card"><div class="info"><p class="name">ربع كبدة شرايح</p><p class="sub">عيش . طحينة . مخلل</p></div><div class="price">85ج</div><button class="add-icon" onclick="add('وجبة كبدة', 85)">+</button></div>
+    <div class="menu-card"><div class="info"><p class="name">رغيف حواوشي</p></div><div class="price">30ج</div><button class="add-icon" onclick="add('حواوشي', 30)">+</button></div>
+    <div class="menu-card"><div class="info"><p class="name">ساندوتش كبدة</p></div><div class="price">15ج</div><button class="add-icon" onclick="add('ساندوتش كبدة', 15)">+</button></div>
+
+    <div class="section-header">الإضافات</div>
+    <div class="menu-card"><div class="info"><p class="name">كبدة ع الكشري</p></div><div class="price">15ج</div><button class="add-icon" onclick="add('إضافة كبدة', 15)">+</button></div>
+    <div class="menu-card"><div class="info"><p class="name">تقلية / عدس / حمص</p></div><div class="price">10ج</div><button class="add-icon" onclick="add('إضافة', 10)">+</button></div>
+    <div class="menu-card"><div class="info"><p class="name">بيبسي</p></div><div class="price">20ج</div><button class="add-icon" onclick="add('بيبسي', 20)">+</button></div>
 </div>
 
-<div id="order-form">
+<div class="order-bar" id="cartBar">
+    <span>الإجمالي: <b id="totalVal">0 ج</b></span>
+    <button class="btn-send" onclick="openForm()">إتمام الطلب ✅</button>
+</div>
+
+<div id="form-overlay">
     <h2 style="text-align:center; margin-bottom:20px;">بيانات التوصيل</h2>
-    <input type="text" id="cust-name" placeholder="الاسم">
-    <input type="tel" id="cust-phone" placeholder="رقم الهاتف">
-    <textarea id="cust-address" placeholder="العنوان بالتفصيل" rows="3"></textarea>
-    <button style="background:var(--brand-green); color:white; border:none; width:100%; padding:15px; border-radius:10px; font-weight:bold; font-size:18px;" onclick="sendOrder()">تأكيد وإرسال 🚀</button>
-    <button style="background:none; border:none; color:red; width:100%; margin-top:20px; font-weight:bold;" onclick="location.reload()">رجوع للمنيو</button>
+    <input type="text" id="user-n" class="input-field" placeholder="الاسم بالكامل">
+    <input type="tel" id="user-p" class="input-field" placeholder="رقم الموبايل">
+    <textarea id="user-a" class="input-field" placeholder="العنوان بالتفصيل" rows="3"></textarea>
+    <button style="background:var(--green); color:white; border:none; width:100%; padding:20px; border-radius:15px; font-weight:900; font-size:20px;" onclick="finish()">إرسال للواتساب 🚀</button>
+    <button style="background:none; border:none; color:red; width:100%; margin-top:20px; font-weight:bold;" onclick="location.reload()">إلغاء</button>
 </div>
 
 <script>
-    let items = []; let total = 0;
+    let cart = []; let total = 0;
     function add(n, p) {
-        items.push(n); total += p;
+        cart.push(n); total += p;
         document.getElementById('cartBar').style.display = 'flex';
-        document.getElementById('totalPrice').innerText = total + " ج";
+        document.getElementById('totalVal').innerText = total + " ج";
     }
-    function showForm() { document.getElementById('order-form').style.display = 'block'; }
-    function sendOrder() {
-        const n = document.getElementById('cust-name').value;
-        const p = document.getElementById('cust-phone').value;
-        const a = document.getElementById('cust-address').value;
-        if(!n || !p || !a) return alert("كمل البيانات يا بطل");
-        let msg = `*طلب جديد - أولاد زكريا*%0A%0A*الاسم:* ${n}%0A*الهاتف:* ${p}%0A*العنوان:* ${a}%0A%0A*الطلبات:* ${items.join(' + ')}%0A%0A*الإجمالي:* ${total} ج`;
+    function openForm() { document.getElementById('form-overlay').style.display = 'block'; }
+    function finish() {
+        const n = document.getElementById('user-n').value;
+        const p = document.getElementById('user-p').value;
+        const a = document.getElementById('user-a').value;
+        if(!n || !p || !a) return alert("من فضلك كمل بياناتك");
+        let msg = `*طلب جديد - أولاد زكريا*%0A%0A*الاسم:* ${n}%0A*الهاتف:* ${p}%0A*العنوان:* ${a}%0A%0A*الطلبات:* ${cart.join(' + ')}%0A%0A*الإجمالي:* ${total} ج`;
         window.open(`https://wa.me/201022101718?text=${msg}`);
     }
 </script>
