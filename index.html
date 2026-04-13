@@ -3,95 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منيو كشري وحواوشي</title>
+    <title>منيو كشري وحواوشي - كامل</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Tajawal', sans-serif; background: #f4f4f4; margin: 0; padding-bottom: 80px; text-align: right; }
-        header { background: #f27e27; color: white; padding: 20px; text-align: center; border-bottom: 4px solid #ffcc00; }
-        .category-title { background: #eee; padding: 10px; font-size: 18px; color: #f27e27; border-right: 5px solid #f27e27; margin: 10px 0; }
+        body { font-family: 'Tajawal', sans-serif; background: #fff; margin: 0; padding-bottom: 90px; }
+        header { background: #f27e27; color: white; padding: 25px; text-align: center; border-bottom: 5px solid #73b32d; }
         
-        .item { background: white; margin: 10px; padding: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .item-name { font-weight: bold; font-size: 16px; }
-        .item-price { color: #555; margin-left: 10px; }
-        .add-btn { background: #25d366; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; }
+        .section-header { 
+            background: #73b32d; 
+            color: white; 
+            padding: 8px 25px; 
+            width: fit-content; 
+            margin: 20px auto 10px; 
+            border-radius: 0 15px 0 15px;
+            font-size: 18px;
+            box-shadow: 2px 2px 0px #5a8d23;
+        }
 
-        .cart-bar { position: fixed; bottom: 0; width: 100%; background: #f27e27; color: white; padding: 15px; display: none; justify-content: space-between; font-weight: bold; cursor: pointer; }
+        .items-container { padding: 0 10px; }
         
-        #order-form { display: none; position: fixed; top: 0; background: white; width: 100%; height: 100%; padding: 20px; box-sizing: border-box; z-index: 100; }
-        input, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; }
-        .submit-btn { background: #25d366; color: white; width: 100%; padding: 15px; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; }
+        .food-item { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 12px 15px; 
+            border-bottom: 1px dashed #ddd;
+            background: #fafafa;
+            margin-bottom: 4px;
+            border-radius: 6px;
+        }
+
+        .name { font-size: 15px; color: #333; font-weight: bold; flex: 1; }
+        .price { color: #f27e27; font-weight: bold; font-size: 16px; margin: 0 10px; min-width: 50px; text-align: left; }
+        
+        .btn-plus { 
+            background: #f27e27; 
+            color: white; 
+            border: none; 
+            width: 32px; 
+            height: 32px; 
+            border-radius: 50%; 
+            font-size: 18px; 
+            cursor: pointer;
+        }
+
+        .cart-footer { 
+            position: fixed; bottom: 0; width: 100%; background: #73b32d; 
+            color: white; padding: 15px; display: none; justify-content: space-between; 
+            font-size: 17px; z-index: 1000; box-sizing: border-box;
+        }
+
+        #order-form { 
+            display: none; position: fixed; top: 0; background: white; 
+            width: 100%; height: 100%; padding: 25px 15px; z-index: 2000; overflow-y: auto; box-sizing: border-box;
+        }
+        input, textarea { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 6px; font-size: 15px; box-sizing: border-box; }
+        .confirm-btn { background: #25d366; color: white; border: none; width: 100%; padding: 15px; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <header>
     <h1>كشري وحواوشي</h1>
-    <p>أطيب الأكلات الشعبية</p>
+    <p>الأصناف كاملة كما في المنيو</p>
 </header>
 
-<div class="category-title">قسم الكشري</div>
-<div class="item">
-    <span class="item-name">كشري (علبة صغيرة)</span>
-    <div>
-        <span class="item-price">25 ج.م</span>
-        <button class="add-btn" onclick="add('كشري صغير', 25)">+</button>
-    </div>
-</div>
-<div class="item">
-    <span class="item-name">كشري (علبة كبيرة)</span>
-    <div>
-        <span class="item-price">35 ج.م</span>
-        <button class="add-btn" onclick="add('كشري كبير', 35)">+</button>
-    </div>
+<div class="items-container">
+    <div class="section-header">قسم الكشري</div>
+    <div class="food-item"><span class="name">علبة كشري صغير</span><span class="price">15 ج</span><button class="btn-plus" onclick="add('كشري صغير', 15)">+</button></div>
+    <div class="food-item"><span class="name">علبة كشري وسط</span><span class="price">20 ج</span><button class="btn-plus" onclick="add('كشري وسط', 20)">+</button></div>
+    <div class="food-item"><span class="name">علبة كشري كبير</span><span class="price">25 ج</span><button class="btn-plus" onclick="add('كشري كبير', 25)">+</button></div>
+    <div class="food-item"><span class="name">علبة كشري عائلي</span><span class="price">35 ج</span><button class="btn-plus" onclick="add('كشري عائلي', 35)">+</button></div>
+    <div class="food-item"><span class="name">كشري سبيشيال</span><span class="price">40 ج</span><button class="btn-plus" onclick="add('كشري سبيشيال', 40)">+</button></div>
+
+    <div class="section-header">قسم الطواجن</div>
+    <div class="food-item"><span class="name">طاجن لحمة مفرومة</span><span class="price">30 ج</span><button class="btn-plus" onclick="add('طاجن لحمة', 30)">+</button></div>
+    <div class="food-item"><span class="name">طاجن فراخ</span><span class="price">35 ج</span><button class="btn-plus" onclick="add('طاجن فراخ', 35)">+</button></div>
+    <div class="food-item"><span class="name">طاجن كبدة</span><span class="price">35 ج</span><button class="btn-plus" onclick="add('طاجن كبدة', 35)">+</button></div>
+    <div class="food-item"><span class="name">طاجن ميكس</span><span class="price">45 ج</span><button class="btn-plus" onclick="add('طاجن ميكس', 45)">+</button></div>
+
+    <div class="section-header">حواوشي وساندوتشات</div>
+    <div class="food-item"><span class="name">رغيف حواوشي عادي</span><span class="price">25 ج</span><button class="btn-plus" onclick="add('حواوشي عادي', 25)">+</button></div>
+    <div class="food-item"><span class="name">رغيف حواوشي مخصوص</span><span class="price">35 ج</span><button class="btn-plus" onclick="add('حواوشي مخصوص', 35)">+</button></div>
+    <div class="food-item"><span class="name">ساندوتش كبدة</span><span class="price">15 ج</span><button class="btn-plus" onclick="add('ساندوتش كبدة', 15)">+</button></div>
+    <div class="food-item"><span class="name">ساندوتش سجق</span><span class="price">15 ج</span><button class="btn-plus" onclick="add('ساندوتش سجق', 15)">+</button></div>
+
+    <div class="section-header">الإضافات</div>
+    <div class="food-item"><span class="name">كبدة إضافي</span><span class="price">15 ج</span><button class="btn-plus" onclick="add('كبدة إضافي', 15)">+</button></div>
+    <div class="food-item"><span class="name">صلصة إضافي</span><span class="price">5 ج</span><button class="btn-plus" onclick="add('صلصة إضافي', 5)">+</button></div>
+    <div class="food-item"><span class="name">تقلية إضافي</span><span class="price">5 ج</span><button class="btn-plus" onclick="add('تقلية إضافي', 5)">+</button></div>
+    <div class="food-item"><span class="name">علبة دقّة / شطة</span><span class="price">3 ج</span><button class="btn-plus" onclick="add('دقة/شطة', 3)">+</button></div>
+
+    <div class="section-header">الحلويات</div>
+    <div class="food-item"><span class="name">أرز بلبن</span><span class="price">15 ج</span><button class="btn-plus" onclick="add('أرز بلبن', 15)">+</button></div>
+    <div class="food-item"><span class="name">مهلبية</span><span class="price">15 ج</span><button class="btn-plus" onclick="add('مهلبية', 15)">+</button></div>
 </div>
 
-<div class="category-title">قسم الحواوشي</div>
-<div class="item">
-    <span class="item-name">رغيف حواوشي مخصوص</span>
-    <div>
-        <span class="item-price">30 ج.م</span>
-        <button class="add-btn" onclick="add('حواوشي', 30)">+</button>
-    </div>
-</div>
-
-<div class="cart-bar" id="cart" onclick="showForm()">
-    <span>إرسال الطلب عبر واتساب</span>
-    <span id="total">0 ج.م</span>
+<div class="cart-footer" id="cart" onclick="openForm()">
+    <span>🛒 أرسل طلبك للمطعم</span>
+    <span id="total-price">0 ج</span>
 </div>
 
 <div id="order-form">
-    <h2>بيانات التوصيل</h2>
-    <input type="text" id="name" placeholder="الاسم">
-    <input type="tel" id="phone" placeholder="رقم التليفون">
-    <textarea id="address" placeholder="العنوان بالتفصيل"></textarea>
-    <button class="submit-btn" onclick="send()">تأكيد الطلب</button>
-    <button onclick="location.reload()" style="background:none; border:none; color:red; margin-top:10px; width:100%">إلغاء</button>
+    <h2 style="color:#f27e27; text-align:center;">بيانات التوصيل</h2>
+    <input type="text" id="cust-name" placeholder="الاسم بالكامل">
+    <input type="tel" id="cust-phone" placeholder="رقم التليفون">
+    <textarea id="cust-address" placeholder="العنوان بالتفصيل" rows="3"></textarea>
+    <button class="confirm-btn" onclick="sendOrder()">تأكيد وإرسال واتساب ✅</button>
+    <button onclick="location.reload()" style="background:none; border:none; color:red; margin-top:15px; width:100%">رجوع للمنيو</button>
 </div>
 
 <script>
-    let cart = [];
-    let total = 0;
+    let basket = [];
+    let sum = 0;
 
-    function add(name, price) {
-        cart.push(name);
-        total += price;
+    function add(item, price) {
+        basket.push(item);
+        sum += price;
         document.getElementById('cart').style.display = 'flex';
-        document.getElementById('total').innerText = total + " ج.م";
+        document.getElementById('total-price').innerText = sum + " ج";
     }
 
-    function showForm() {
-        document.getElementById('order-form').style.display = 'block';
-    }
+    function openForm() { document.getElementById('order-form').style.display = 'block'; }
 
-    function send() {
-        const n = document.getElementById('name').value;
-        const p = document.getElementById('phone').value;
-        const a = document.getElementById('address').value;
+    function sendOrder() {
+        const name = document.getElementById('cust-name').value;
+        const phone = document.getElementById('cust-phone').value;
+        const address = document.getElementById('cust-address').value;
+
+        if(!name || !phone || !address) return alert("برجاء ملء البيانات كاملة");
+
+        let itemsText = basket.join(' + ');
+        let waMsg = `*طلب جديد*%0A%0A*الاسم:* ${name}%0A*الهاتف:* ${phone}%0A*العنوان:* ${address}%0A%0A*الأصناف:* ${itemsText}%0A%0A*الإجمالي:* ${sum} ج`;
         
-        if(!n || !p || !a) return alert("كمل البيانات يا بطل");
-
-        let msg = `*طلب جديد*%0A*الاسم:* ${n}%0A*العنوان:* ${a}%0A*الطلبات:* ${cart.join(' ، ')}%0A*الإجمالي:* ${total} ج.م`;
-        window.open(`https://wa.me/201022101718?text=${msg}`);
+        window.open(`https://wa.me/201022101718?text=${waMsg}`);
     }
 </script>
 
