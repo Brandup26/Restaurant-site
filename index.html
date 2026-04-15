@@ -3,159 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام إدارة المطاعم الذكي | Pro SaaS System</title>
+    <title>نظام أولاد أنس المتكامل</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #f27e27; --accent: #ffc107; --dark: #0f0f0f; --card: #1a1a1a; }
+        :root { --primary: #f27e27; --dark: #0f0f0f; --card: #1a1a1a; --white: #ffffff; }
         * { box-sizing: border-box; font-family: 'Cairo', sans-serif; margin: 0; padding: 0; }
-        body { background: #000; color: #fff; scroll-behavior: smooth; }
+        body { background: #000; color: var(--white); overflow-x: hidden; }
 
-        /* --- واجهة الزبون (المنيو) --- */
-        .client-section { border-bottom: 5px dashed #333; padding-bottom: 50px; background: var(--dark); }
-        header { text-align: center; padding: 50px 20px; background: linear-gradient(rgba(0,0,0,0.8), var(--dark)); border-bottom: 3px solid var(--primary); }
-        .main-logo { width: 120px; height: 120px; background: #fff; border-radius: 50%; margin: 0 auto 20px; overflow: hidden; border: 4px solid var(--accent); box-shadow: 0 0 20px rgba(242, 126, 39, 0.5); }
-        .main-logo img { width: 100%; height: 100%; object-fit: contain; }
+        /* واجهة الزبون */
+        .client-view { padding-bottom: 100px; background: var(--dark); }
+        header { text-align: center; padding: 30px 15px; border-bottom: 2px solid var(--primary); }
+        .logo-box { width: 90px; height: 90px; background: #fff; border-radius: 50%; margin: 0 auto 15px; overflow: hidden; border: 3px solid var(--primary); }
+        .logo-box img { width: 100%; height: 100%; object-fit: contain; }
         
-        .menu-grid { max-width: 800px; margin: 30px auto; padding: 0 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .menu-item { background: var(--card); padding: 20px; border-radius: 15px; border: 1px solid #333; display: flex; justify-content: space-between; align-items: center; }
-        .item-price { color: var(--accent); font-weight: 900; font-size: 22px; }
+        .menu-list { max-width: 500px; margin: 20px auto; padding: 0 15px; }
+        .menu-card { 
+            background: var(--card); padding: 15px; border-radius: 12px; margin-bottom: 12px; 
+            display: flex; justify-content: space-between; align-items: center;
+            border: 1px solid #333; cursor: pointer; transition: 0.2s;
+        }
+        .menu-card:active { transform: scale(0.95); border-color: var(--primary); }
+        .price-tag { color: var(--primary); font-weight: 900; font-size: 20px; }
 
-        /* --- لوحة تحكم صاحب المطعم (Dashboard) --- */
-        .admin-section { background: #f4f7f6; color: #222; padding: 40px 20px; min-height: 100vh; }
-        .admin-card { max-width: 900px; margin: auto; background: white; border-radius: 20px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-top: 8px solid var(--primary); }
-        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 2px solid #eee; padding-bottom: 15px; }
-        
-        .control-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
-        .field-group { margin-bottom: 20px; }
-        label { display: block; font-weight: bold; margin-bottom: 8px; color: #444; }
-        input[type="text"], input[type="number"], input[type="tel"] { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 10px; font-size: 16px; transition: 0.3s; }
-        input:focus { border-color: var(--primary); outline: none; }
-        
-        .upload-area { border: 2px dashed var(--primary); padding: 20px; text-align: center; border-radius: 15px; background: #fff9f5; cursor: pointer; transition: 0.3s; }
-        .upload-area:hover { background: #ffe8d6; }
-        
-        .btn-save { background: var(--primary); color: white; border: none; padding: 18px 40px; border-radius: 12px; cursor: pointer; font-weight: 900; width: 100%; font-size: 20px; margin-top: 30px; transition: 0.3s; box-shadow: 0 5px 15px rgba(242, 126, 39, 0.3); }
-        .btn-save:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(242, 126, 39, 0.5); }
+        /* سلة الطلبات */
+        .order-bar { 
+            position: fixed; bottom: 0; width: 100%; background: #25d366; color: white;
+            padding: 15px; text-align: center; font-weight: 900; cursor: pointer;
+            display: none; z-index: 1000; box-shadow: 0 -5px 15px rgba(0,0,0,0.5);
+        }
 
-        @media (max-width: 600px) { .menu-grid { grid-template-columns: 1fr; } .admin-grid { grid-template-columns: 1fr; } }
+        /* لوحة التحكم - إصلاح مشكلة الشمال */
+        .admin-view { background: #f4f4f4; color: #333; padding: 25px 15px; border-top: 5px solid var(--primary); }
+        .admin-card { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .input-group { margin-bottom: 15px; width: 100%; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px; }
+        input { 
+            width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; 
+            font-size: 16px; text-align: right; display: block;
+        }
+        .save-btn { 
+            background: var(--primary); color: white; border: none; padding: 15px; 
+            width: 100%; border-radius: 8px; font-weight: 900; font-size: 18px; cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
-    <section class="client-section" id="menuView">
+    <div class="client-view">
         <header>
-            <div class="main-logo">
-                <img id="displayLogo" src="https://via.placeholder.com/150?text=LOGO" alt="Logo">
-            </div>
-            <h1 id="displayName" style="font-size: 35px; font-weight: 900;">اسم المطعم</h1>
-            <p id="displaySlogan" style="opacity: 0.7; font-weight: bold;">وصف المطعم يظهر هنا</p>
+            <div class="logo-box"><img id="viewLogo" src="https://via.placeholder.com/100" alt="Logo"></div>
+            <h1 id="viewName">أولاد الحاج أنس</h1>
+            <p id="viewSlogan" style="color:#888">أجمد كشري وطواجن في مصر</p>
         </header>
 
-        <div class="menu-grid">
-            <div class="menu-item">
-                <span id="displayItem1" style="font-weight: bold; font-size: 18px;">كشري مخصوص</span>
-                <span class="item-price" id="displayPrice1">00ج</span>
+        <div class="menu-list">
+            <div class="menu-card" onclick="addToOrder('كشري مخصوص', document.getElementById('price1').innerText)">
+                <span style="font-weight:bold">كشري مخصوص</span>
+                <span class="price-tag"><span id="price1">45</span>ج</span>
             </div>
-            <div class="menu-item">
-                <span id="displayItem2" style="font-weight: bold; font-size: 18px;">طاجن الفرن</span>
-                <span class="item-price" id="displayPrice2">00ج</span>
+            <div class="menu-card" onclick="addToOrder('طاجن الفرن', document.getElementById('price2').innerText)">
+                <span style="font-weight:bold">طاجن الفرن</span>
+                <span class="price-tag"><span id="price2">100</span>ج</span>
             </div>
         </div>
-        <p style="text-align: center; font-size: 12px; color: #444;">هذه هي واجهة الزبون (المنيو الإلكتروني)</p>
-    </section>
+    </div>
 
-    <section class="admin-section">
+    <div class="admin-view">
         <div class="admin-card">
-            <div class="admin-header">
-                <h2 style="color: var(--primary);">⚙️ لوحة تحكم الإدارة</h2>
-                <span style="background: #eee; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: bold;">نسخة مبرمج ميكاترونكس v2.0</span>
+            <h2 style="text-align:center; color:var(--primary); margin-bottom:20px">⚙️ لوحة الإدارة</h2>
+            
+            <div class="input-group">
+                <label>اسم المطعم (البراند):</label>
+                <input type="text" id="editName" value="أولاد الحاج أنس">
+            </div>
+            <div class="input-group">
+                <label>رقم الواتساب (بدون أصفار):</label>
+                <input type="tel" id="editPhone" value="01003800314">
+            </div>
+            <div class="input-group">
+                <label>سعر الكشري:</label>
+                <input type="number" id="editP1" value="45">
+            </div>
+            <div class="input-group">
+                <label>سعر الطاجن:</label>
+                <input type="number" id="editP2" value="100">
+            </div>
+            <div class="input-group">
+                <label>لوجو المطعم (رفع ملف):</label>
+                <input type="file" id="editFile" accept="image/*" onchange="updateLogo(event)">
             </div>
 
-            <div class="control-grid">
-                <div class="field-group">
-                    <label>اسم المطعم (البراند):</label>
-                    <input type="text" id="inputName" placeholder="مثال: أولاد زكريا">
-                </div>
-                <div class="field-group">
-                    <label>شعار المطعم (Slogan):</label>
-                    <input type="text" id="inputSlogan" placeholder="مثال: أصل الطعم المصري">
-                </div>
-                <div class="field-group">
-                    <label>سعر الكشري (جنيه):</label>
-                    <input type="number" id="inputPrice1" placeholder="00">
-                </div>
-                <div class="field-group">
-                    <label>سعر الطاجن (جنيه):</label>
-                    <input type="number" id="inputPrice2" placeholder="00">
-                </div>
-                <div class="field-group" style="grid-column: span 2;">
-                    <label>رقم الواتساب (لاستقبال الطلبات):</label>
-                    <input type="tel" id="inputPhone" placeholder="01xxxxxxxxx">
-                </div>
-            </div>
-
-            <div class="field-group">
-                <label>تغيير اللوجو (اختر صورة من المعرض):</label>
-                <div class="upload-area" onclick="document.getElementById('fileUpload').click()">
-                    <p id="fileName">اضغط هنا لرفع صورة اللوجو 📷</p>
-                    <input type="file" id="fileUpload" hidden accept="image/*" onchange="handleImage(event)">
-                </div>
-            </div>
-
-            <button class="btn-save" onclick="updateMenu()">تطبيق التعديلات وحفظ البيانات ✅</button>
-            <p style="text-align: center; margin-top: 15px; font-size: 14px; color: #888;">بمجرد الحفظ، ستتغير الأسعار والبيانات عند جميع الزبائن فوراً.</p>
+            <button class="save-btn" onclick="applyChanges()">حفظ وتحديث المنيو ✅</button>
         </div>
-    </section>
+    </div>
+
+    <div class="order-bar" id="orderBar" onclick="sendOrder()">
+        إرسال الطلب للواتساب (الإجمالي: <span id="total">0</span> ج)
+    </div>
 
     <script>
-        // وظيفة معالجة الصورة المرفوعة من المعرض
-        function handleImage(event) {
-            const file = event.target.files[0];
-            if (file) {
-                document.getElementById('fileName').innerText = "تم اختيار: " + file.name;
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    // عرض الصورة فوراً في المنيو (معاينة)
-                    document.getElementById('displayLogo').src = e.target.result;
-                }
-                reader.readAsDataURL(file);
-            }
+        let currentOrder = [];
+        let totalPrice = 0;
+
+        function updateLogo(event) {
+            const reader = new FileReader();
+            reader.onload = function(e) { document.getElementById('viewLogo').src = e.target.result; }
+            reader.readAsDataURL(event.target.files[0]);
         }
 
-        // وظيفة تحديث المنيو بالكامل
-        function updateMenu() {
-            // سحب القيم من خانات الإدارة
-            const name = document.getElementById('inputName').value;
-            const slogan = document.getElementById('inputSlogan').value;
-            const price1 = document.getElementById('inputPrice1').value;
-            const price2 = document.getElementById('inputPrice2').value;
-
-            // التأكد من إدخال بيانات
-            if(!name || !price1) {
-                alert("برجاء إدخال اسم المطعم والأسعار على الأقل.");
-                return;
-            }
-
-            // تطبيق القيم على واجهة الزبون
-            document.getElementById('displayName').innerText = name;
-            document.getElementById('displaySlogan').innerText = slogan;
-            document.getElementById('displayPrice1').innerText = price1 + "ج";
-            document.getElementById('displayPrice2').innerText = price2 + "ج";
-
-            // رسالة نجاح
-            alert("تم تحديث السيستم بنجاح! \n المطعم: " + name + " جاهز الآن للعمل.");
-            
-            // سكرول تلقائي للمنيو عشان يشوف النتيجة
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        function applyChanges() {
+            document.getElementById('viewName').innerText = document.getElementById('editName').value;
+            document.getElementById('price1').innerText = document.getElementById('editP1').value;
+            document.getElementById('price2').innerText = document.getElementById('editP2').value;
+            alert("تم التحديث! جرب تضغط على الأصناف فوق لطلبها.");
+            window.scrollTo({top: 0, behavior: 'smooth'});
         }
 
-        // قيم افتراضية عند التشغيل لأول مرة
-        window.onload = function() {
-            document.getElementById('inputName').value = "أولاد زكريا";
-            document.getElementById('inputSlogan').value = "أجمد كشري وطواجن في مصر";
-            document.getElementById('inputPrice1').value = "45";
-            document.getElementById('inputPrice2').value = "60";
-            updateMenu();
+        function addToOrder(name, price) {
+            currentOrder.push(name);
+            totalPrice += parseInt(price);
+            document.getElementById('orderBar').style.display = 'block';
+            document.getElementById('total').innerText = totalPrice;
+        }
+
+        function sendOrder() {
+            const phone = document.getElementById('editPhone').value;
+            const name = document.getElementById('viewName').innerText;
+            const msg = `*طلب جديد من ${name}*%0A*الطلبات:* ${currentOrder.join(' + ')}%0A*الإجمالي:* ${totalPrice} جنيه`;
+            window.open(`https://wa.me/2${phone}?text=${msg}`);
         }
     </script>
 </body>
