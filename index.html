@@ -2,143 +2,95 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>منصة أولاد زكريا | النظام المتكامل</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام أولاد زكريا - الإدارة الكاملة</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #f27e27; --dark: #0f0f0f; --card: #1a1a1a; --white: #ffffff; }
+        :root { --primary: #f27e27; --dark: #0b0b0b; --card: #181818; }
         * { box-sizing: border-box; font-family: 'Cairo', sans-serif; margin: 0; padding: 0; }
-        body { background: #000; color: var(--white); overflow-x: hidden; width: 100%; }
+        body { background: #000; color: #fff; }
 
         /* واجهة الزبون */
-        header { text-align: center; padding: 30px 15px; border-bottom: 3px solid var(--primary); background: linear-gradient(to bottom, #1a1a1a, #000); }
-        .logo-box { width: 110px; height: 110px; background: #fff; border-radius: 50%; margin: 0 auto 15px; overflow: hidden; border: 4px solid var(--primary); box-shadow: 0 0 15px rgba(242, 126, 39, 0.4); }
-        .logo-box img { width: 100%; height: 100%; object-fit: contain; }
-        
-        .section-title { color: var(--primary); margin: 25px 20px 15px; border-right: 5px solid var(--primary); padding-right: 12px; font-size: 22px; font-weight: 900; }
-        .menu-list { padding: 0 15px; max-width: 600px; margin: auto; }
-        .menu-card { 
-            background: var(--card); padding: 18px; border-radius: 15px; margin-bottom: 12px; 
-            display: flex; justify-content: space-between; align-items: center;
-            border: 1px solid #333; cursor: pointer; transition: transform 0.2s, border-color 0.2s;
-        }
-        .menu-card:active { transform: scale(0.95); border-color: var(--primary); background: #252525; }
-        .price-tag { color: var(--primary); font-weight: 900; font-size: 21px; }
+        header { text-align: center; padding: 30px; border-bottom: 3px solid var(--primary); }
+        .section-title { color: var(--primary); padding: 15px 20px; font-size: 20px; border-right: 4px solid var(--primary); margin: 20px 10px; }
+        .menu-item { background: var(--card); margin: 10px 15px; padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; border: 1px solid #333; }
+        .price { color: var(--primary); font-weight: 900; font-size: 1.2rem; }
 
-        /* سلة الطلبات الثابتة */
-        .order-bar { 
-            position: fixed; bottom: 0; left: 0; width: 100%; background: #25d366; color: white;
-            padding: 20px; text-align: center; font-weight: 900; cursor: pointer;
-            display: none; z-index: 2000; font-size: 18px; box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
-        }
-
-        /* لوحة التحكم - إصلاح الـ Layout */
-        .admin-view { background: #f8f9fa; color: #333; padding: 40px 15px; border-top: 6px solid var(--primary); margin-top: 50px; }
-        .admin-card { max-width: 550px; margin: auto; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .input-group { margin-bottom: 20px; width: 100%; }
-        label { display: block; margin-bottom: 8px; font-weight: 700; color: #555; font-size: 15px; }
-        input { 
-            width: 100%; padding: 14px; border: 2px solid #ddd; border-radius: 10px; 
-            font-size: 16px; transition: border-color 0.3s; background: #fff;
-        }
-        input:focus { border-color: var(--primary); outline: none; }
-        .save-btn { 
-            background: var(--primary); color: white; border: none; padding: 18px; 
-            width: 100%; border-radius: 12px; font-weight: 900; font-size: 19px; 
-            cursor: pointer; box-shadow: 0 4px 15px rgba(242, 126, 39, 0.3);
-        }
+        /* لوحة التحكم (الإدارة) */
+        .admin-panel { background: #fdfdfd; color: #333; padding: 30px 15px; border-top: 6px solid var(--primary); margin-top: 50px; }
+        .admin-card { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .price-edit-grid { display: grid; grid-template-columns: 1fr 100px; gap: 10px; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        label { font-weight: bold; font-size: 14px; }
+        input { padding: 10px; border: 2px solid #ddd; border-radius: 8px; text-align: center; font-weight: bold; }
+        .btn-save { background: var(--primary); color: white; border: none; padding: 18px; width: 100%; border-radius: 12px; font-weight: 900; font-size: 18px; cursor: pointer; margin-top: 20px; }
     </style>
 </head>
 <body>
 
     <div id="clientView">
         <header>
-            <div class="logo-box"><img id="viewLogo" src="https://i.imgur.com/8QyVfXY.png" alt="Logo"></div>
             <h1 id="viewName">أولاد زكريا</h1>
-            <p id="viewSlogan" style="color:#aaa; font-weight: bold;">أصل الكشري والطواجن في مصر</p>
+            <p style="color:#888">قائمة الطعام الرسمية</p>
         </header>
 
         <h2 class="section-title">علب الكشري</h2>
-        <div class="menu-list">
-            <div class="menu-card" onclick="addToCart('كشري النخبة (سوبر)', 55)"><span>كشري النخبة (سوبر)</span><span class="price-tag">55ج</span></div>
-            <div class="menu-card" onclick="addToCart('كشري القمة (كبير)', 45)"><span>كشري القمة (كبير)</span><span class="price-tag">45ج</span></div>
-            <div class="menu-card" onclick="addToCart('كشري زكريا (وسط)', 35)"><span>كشري زكريا (وسط)</span><span class="price-tag">35ج</span></div>
-            <div class="menu-card" onclick="addToCart('كشري عادي (صغير)', 25)"><span>كشري عادي (صغير)</span><span class="price-tag">25ج</span></div>
-        </div>
+        <div class="menu-item"><span>كشري النخبة (سوبر)</span><span class="price"><span id="p1_val">55</span>ج</span></div>
+        <div class="menu-item"><span>كشري القمة (كبير)</span><span class="price"><span id="p2_val">45</span>ج</span></div>
+        <div class="menu-item"><span>كشري زكريا (وسط)</span><span class="price"><span id="p3_val">35</span>ج</span></div>
 
         <h2 class="section-title">طواجن الفرن</h2>
-        <div class="menu-list">
-            <div class="menu-card" onclick="addToCart('طاجن فراخ ميكس جبن', 70)"><span>طاجن فراخ ميكس جبن</span><span class="price-tag">70ج</span></div>
-            <div class="menu-card" onclick="addToCart('طاجن لحمة موزة', 65)"><span>طاجن لحمة موزة</span><span class="price-tag">65ج</span></div>
-            <div class="menu-card" onclick="addToCart('طاجن كبدة إسكندراني', 55)"><span>طاجن كبدة إسكندراني</span><span class="price-tag">55ج</span></div>
-            <div class="menu-card" onclick="addToCart('طاجن سادة بالصلصة', 30)"><span>طاجن سادة بالصلصة</span><span class="price-tag">30ج</span></div>
-        </div>
+        <div class="menu-item"><span>طاجن فراخ ميكس جبن</span><span class="price"><span id="p4_val">70</span>ج</span></div>
+        <div class="menu-item"><span>طاجن لحمة موزة</span><span class="price"><span id="p5_val">65</span>ج</span></div>
 
-        <h2 class="section-title">الحواوشي الإسكندراني</h2>
-        <div class="menu-list">
-            <div class="menu-card" onclick="addToCart('حواوشي مخصوص دبل جبنة', 60)"><span>حواوشي مخصوص دبل جبنة</span><span class="price-tag">60ج</span></div>
-            <div class="menu-card" onclick="addToCart('حواوشي لحمة بلدي كبير', 50)"><span>حواوشي لحمة بلدي كبير</span><span class="price-tag">50ج</span></div>
-        </div>
-
-        <h2 class="section-title">الحلو</h2>
-        <div class="menu-list">
-            <div class="menu-card" onclick="addToCart('أرز بلدن فرن', 25)"><span>أرز بلبن فرن</span><span class="price-tag">25ج</span></div>
-            <div class="menu-card" onclick="addToCart('مهلبية بالمكسرات', 20)"><span>مهلبية بالمكسرات</span><span class="price-tag">20ج</span></div>
-        </div>
+        <h2 class="section-title">الحواوشي</h2>
+        <div class="menu-item"><span>حواوشي مخصوص</span><span class="price"><span id="p6_val">50</span>ج</span></div>
     </div>
 
-    <div class="admin-view">
+    <div class="admin-panel">
         <div class="admin-card">
-            <h2 style="text-align:center; color:var(--primary); margin-bottom:25px; font-weight: 900;">⚙️ لوحة الإدارة الشاملة</h2>
-            <div class="input-group">
-                <label>اسم المطعم المكتوب للزبائن:</label>
-                <input type="text" id="editName" value="أولاد زكريا">
+            <h2 style="text-align:center; color:var(--primary); margin-bottom:20px">⚙️ تعديل أسعار المنيو</h2>
+            
+            <div class="price-edit-grid">
+                <label>كشري النخبة (سوبر):</label>
+                <input type="number" id="p1_edit" value="55">
             </div>
-            <div class="input-group">
-                <label>رقم واتساب استقبال الطلبات:</label>
-                <input type="tel" id="editPhone" value="01022101718">
+            <div class="price-edit-grid">
+                <label>كشري القمة (كبير):</label>
+                <input type="number" id="p2_edit" value="45">
             </div>
-            <div class="input-group">
-                <label>تغيير لوجو المطعم (صورة):</label>
-                <input type="file" accept="image/*" onchange="updateLogo(event)" style="border:none; padding: 5px;">
+            <div class="price-edit-grid">
+                <label>كشري زكريا (وسط):</label>
+                <input type="number" id="p3_edit" value="35">
             </div>
-            <button class="save-btn" onclick="applyChanges()">حفظ البيانات وتحديث المنيو ✅</button>
-            <p style="text-align:center; margin-top:15px; font-size:13px; color:#777;">جميع التعديلات تظهر فوراً للزبائن عند الحفظ.</p>
-        </div>
-    </div>
+            <div class="price-edit-grid">
+                <label>طاجن فراخ ميكس:</label>
+                <input type="number" id="p4_edit" value="70">
+            </div>
+            <div class="price-edit-grid">
+                <label>طاجن لحمة موزة:</label>
+                <input type="number" id="p5_edit" value="65">
+            </div>
+            <div class="price-edit-grid">
+                <label>حواوشي مخصوص:</label>
+                <input type="number" id="p6_edit" value="50">
+            </div>
 
-    <div class="order-bar" id="orderBar" onclick="sendOrder()">
-        🛒 إرسال الطلب (الإجمالي: <span id="total">0</span> ج)
+            <button class="btn-save" onclick="savePrices()">حفظ الأسعار الجديدة وتحديث المنيو ✅</button>
+        </div>
     </div>
 
     <script>
-        let cart = [];
-        let total = 0;
+        function savePrices() {
+            // ربط كل خانة تعديل بالرقم اللي بيظهر للزبون فوق
+            document.getElementById('p1_val').innerText = document.getElementById('p1_edit').value;
+            document.getElementById('p2_val').innerText = document.getElementById('p2_edit').value;
+            document.getElementById('p3_val').innerText = document.getElementById('p3_edit').value;
+            document.getElementById('p4_val').innerText = document.getElementById('p4_edit').value;
+            document.getElementById('p5_val').innerText = document.getElementById('p5_edit').value;
+            document.getElementById('p6_val').innerText = document.getElementById('p6_edit').value;
 
-        function updateLogo(e) {
-            const reader = new FileReader();
-            reader.onload = () => document.getElementById('viewLogo').src = reader.result;
-            reader.readAsDataURL(e.target.files[0]);
-        }
-
-        function addToCart(name, price) {
-            cart.push(name);
-            total += price;
-            document.getElementById('orderBar').style.display = 'block';
-            document.getElementById('total').innerText = total;
-        }
-
-        function applyChanges() {
-            document.getElementById('viewName').innerText = document.getElementById('editName').value;
-            alert("تم حفظ التعديلات وتحديث النظام بنجاح! ✅");
+            alert("تم تحديث كافة الأسعار بنجاح! جرب تبص على المنيو فوق.");
             window.scrollTo({top: 0, behavior: 'smooth'});
-        }
-
-        function sendOrder() {
-            const phone = document.getElementById('editPhone').value;
-            const restaurant = document.getElementById('viewName').innerText;
-            const message = `*طلب جديد من: ${restaurant}*%0A--------------------------%0A*الطلبات:*%0A- ${cart.join('%0A- ')}%0A--------------------------%0A*الإجمالي:* ${total} جنيه`;
-            window.open(`https://wa.me/2${phone}?text=${message}`);
         }
     </script>
 </body>
