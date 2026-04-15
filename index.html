@@ -3,114 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام إدارة المنيو الاحترافي | SaaS Demo</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>نظام إدارة المطاعم الذكي | Pro SaaS System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #f27e27; --dark: #121212; --card: #1e1e1e; --white: #ffffff; }
-        * { box-sizing: border-box; font-family: 'Tajawal', sans-serif; margin: 0; padding: 0; }
-        body { background: #000; color: var(--white); }
+        :root { --primary: #f27e27; --accent: #ffc107; --dark: #0f0f0f; --card: #1a1a1a; }
+        * { box-sizing: border-box; font-family: 'Cairo', sans-serif; margin: 0; padding: 0; }
+        body { background: #000; color: #fff; scroll-behavior: smooth; }
 
         /* --- واجهة الزبون (المنيو) --- */
-        .client-view { border: 5px solid #333; border-radius: 20px; margin: 20px; padding-bottom: 50px; background: var(--dark); min-height: 600px; }
-        header { text-align: center; padding: 40px 20px; background: linear-gradient(rgba(0,0,0,0.7), var(--dark)); border-bottom: 2px solid var(--primary); }
-        .logo-circle { width: 100px; height: 100px; background: #fff; border-radius: 50%; margin: 0 auto 15px; overflow: hidden; border: 3px solid var(--primary); }
-        .logo-circle img { width: 100%; height: 100%; object-fit: contain; }
+        .client-section { border-bottom: 5px dashed #333; padding-bottom: 50px; background: var(--dark); }
+        header { text-align: center; padding: 50px 20px; background: linear-gradient(rgba(0,0,0,0.8), var(--dark)); border-bottom: 3px solid var(--primary); }
+        .main-logo { width: 120px; height: 120px; background: #fff; border-radius: 50%; margin: 0 auto 20px; overflow: hidden; border: 4px solid var(--accent); box-shadow: 0 0 20px rgba(242, 126, 39, 0.5); }
+        .main-logo img { width: 100%; height: 100%; object-fit: contain; }
         
-        .container { max-width: 600px; margin: auto; padding: 20px; }
-        .item { background: var(--card); padding: 15px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #333; }
-        .price { color: var(--primary); font-weight: 900; font-size: 20px; }
+        .menu-grid { max-width: 800px; margin: 30px auto; padding: 0 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .menu-item { background: var(--card); padding: 20px; border-radius: 15px; border: 1px solid #333; display: flex; justify-content: space-between; align-items: center; }
+        .item-price { color: var(--accent); font-weight: 900; font-size: 22px; }
 
-        /* --- لوحة تحكم صاحب المطعم (الأدمن) --- */
-        .admin-panel { background: #f8f9fa; color: #333; padding: 30px; margin-top: 50px; border-top: 10px solid var(--primary); }
-        .admin-title { color: var(--primary); font-weight: 900; margin-bottom: 20px; text-align: center; border-bottom: 2px solid #ddd; padding-bottom: 10px; }
-        .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 800px; margin: auto; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; font-weight: bold; margin-bottom: 5px; }
-        input { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; }
-        .btn-apply { background: var(--primary); color: white; border: none; padding: 15px 30px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; font-size: 18px; margin-top: 20px; }
-        .btn-apply:hover { background: #d66a1a; }
+        /* --- لوحة تحكم صاحب المطعم (Dashboard) --- */
+        .admin-section { background: #f4f7f6; color: #222; padding: 40px 20px; min-height: 100vh; }
+        .admin-card { max-width: 900px; margin: auto; background: white; border-radius: 20px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-top: 8px solid var(--primary); }
+        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 2px solid #eee; padding-bottom: 15px; }
         
-        .badge-admin { background: #000; color: #fff; padding: 5px 10px; border-radius: 5px; font-size: 12px; float: left; }
+        .control-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .field-group { margin-bottom: 20px; }
+        label { display: block; font-weight: bold; margin-bottom: 8px; color: #444; }
+        input[type="text"], input[type="number"], input[type="tel"] { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 10px; font-size: 16px; transition: 0.3s; }
+        input:focus { border-color: var(--primary); outline: none; }
+        
+        .upload-area { border: 2px dashed var(--primary); padding: 20px; text-align: center; border-radius: 15px; background: #fff9f5; cursor: pointer; transition: 0.3s; }
+        .upload-area:hover { background: #ffe8d6; }
+        
+        .btn-save { background: var(--primary); color: white; border: none; padding: 18px 40px; border-radius: 12px; cursor: pointer; font-weight: 900; width: 100%; font-size: 20px; margin-top: 30px; transition: 0.3s; box-shadow: 0 5px 15px rgba(242, 126, 39, 0.3); }
+        .btn-save:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(242, 126, 39, 0.5); }
+
+        @media (max-width: 600px) { .menu-grid { grid-template-columns: 1fr; } .admin-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
-    <div class="client-view">
+    <section class="client-section" id="menuView">
         <header>
-            <div class="logo-circle">
-                <img id="viewLogo" src="https://via.placeholder.com/100" alt="Logo">
+            <div class="main-logo">
+                <img id="displayLogo" src="https://via.placeholder.com/150?text=LOGO" alt="Logo">
             </div>
-            <h1 id="viewName">اسم المطعم</h1>
-            <p id="viewSlogan" style="color: #aaa;">أهلاً بكم في مطعمنا</p>
+            <h1 id="displayName" style="font-size: 35px; font-weight: 900;">اسم المطعم</h1>
+            <p id="displaySlogan" style="opacity: 0.7; font-weight: bold;">وصف المطعم يظهر هنا</p>
         </header>
 
-        <div class="container">
-            <h2 style="margin-bottom: 15px; color: var(--primary);">المنيو الأكثر طلباً</h2>
-            <div class="item">
-                <span id="viewItem1">كشري سبيشيال</span>
-                <span class="price" id="viewPrice1">50ج</span>
+        <div class="menu-grid">
+            <div class="menu-item">
+                <span id="displayItem1" style="font-weight: bold; font-size: 18px;">كشري مخصوص</span>
+                <span class="item-price" id="displayPrice1">00ج</span>
             </div>
-            <div class="item">
-                <span id="viewItem2">طاجن فراخ ميكس</span>
-                <span class="price" id="viewPrice2">65ج</span>
+            <div class="menu-item">
+                <span id="displayItem2" style="font-weight: bold; font-size: 18px;">طاجن الفرن</span>
+                <span class="item-price" id="displayPrice2">00ج</span>
             </div>
         </div>
-    </div>
+        <p style="text-align: center; font-size: 12px; color: #444;">هذه هي واجهة الزبون (المنيو الإلكتروني)</p>
+    </section>
 
-    <div class="admin-panel">
-        <span class="badge-admin">Dashboard v1.0</span>
-        <h2 class="admin-title">لوحة تحكم صاحب المطعم (الإدارة)</h2>
-        
-        <div class="admin-grid">
-            <div class="form-group">
-                <label>اسم المطعم:</label>
-                <input type="text" id="editName" value="أولاد زكريا">
+    <section class="admin-section">
+        <div class="admin-card">
+            <div class="admin-header">
+                <h2 style="color: var(--primary);">⚙️ لوحة تحكم الإدارة</h2>
+                <span style="background: #eee; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: bold;">نسخة مبرمج ميكاترونكس v2.0</span>
             </div>
-            <div class="form-group">
-                <label>وصف مختصر (Slogan):</label>
-                <input type="text" id="editSlogan" value="أصل الكشري والطواجن">
+
+            <div class="control-grid">
+                <div class="field-group">
+                    <label>اسم المطعم (البراند):</label>
+                    <input type="text" id="inputName" placeholder="مثال: أولاد زكريا">
+                </div>
+                <div class="field-group">
+                    <label>شعار المطعم (Slogan):</label>
+                    <input type="text" id="inputSlogan" placeholder="مثال: أصل الطعم المصري">
+                </div>
+                <div class="field-group">
+                    <label>سعر الكشري (جنيه):</label>
+                    <input type="number" id="inputPrice1" placeholder="00">
+                </div>
+                <div class="field-group">
+                    <label>سعر الطاجن (جنيه):</label>
+                    <input type="number" id="inputPrice2" placeholder="00">
+                </div>
+                <div class="field-group" style="grid-column: span 2;">
+                    <label>رقم الواتساب (لاستقبال الطلبات):</label>
+                    <input type="tel" id="inputPhone" placeholder="01xxxxxxxxx">
+                </div>
             </div>
-            <div class="form-group">
-                <label>سعر الكشري:</label>
-                <input type="number" id="editPrice1" value="50">
+
+            <div class="field-group">
+                <label>تغيير اللوجو (اختر صورة من المعرض):</label>
+                <div class="upload-area" onclick="document.getElementById('fileUpload').click()">
+                    <p id="fileName">اضغط هنا لرفع صورة اللوجو 📷</p>
+                    <input type="file" id="fileUpload" hidden accept="image/*" onchange="handleImage(event)">
+                </div>
             </div>
-            <div class="form-group">
-                <label>سعر الطاجن:</label>
-                <input type="number" id="editPrice2" value="65">
-            </div>
-            <div class="form-group" style="grid-column: span 2;">
-                <label>رابط اللوجو (صورة):</label>
-                <input type="text" id="editLogo" placeholder="ضع رابط صورة اللوجو هنا">
-            </div>
+
+            <button class="btn-save" onclick="updateMenu()">تطبيق التعديلات وحفظ البيانات ✅</button>
+            <p style="text-align: center; margin-top: 15px; font-size: 14px; color: #888;">بمجرد الحفظ، ستتغير الأسعار والبيانات عند جميع الزبائن فوراً.</p>
         </div>
-        
-        <div style="max-width: 800px; margin: auto;">
-            <button class="btn-apply" onclick="applyChanges()">تحديث المنيو فوراً (Live Update) ✅</button>
-        </div>
-        
-        <p style="text-align: center; margin-top: 20px; color: #666; font-size: 13px;">هذه اللوحة هي ما يراها صاحب المطعم فقط ليتحكم في موقعه.</p>
-    </div>
+    </section>
 
     <script>
-        function applyChanges() {
-            // سحب البيانات من لوحة التحكم
-            const name = document.getElementById('editName').value;
-            const slogan = document.getElementById('editSlogan').value;
-            const price1 = document.getElementById('editPrice1').value;
-            const price2 = document.getElementById('editPrice2').value;
-            const logo = document.getElementById('editLogo').value;
+        // وظيفة معالجة الصورة المرفوعة من المعرض
+        function handleImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                document.getElementById('fileName').innerText = "تم اختيار: " + file.name;
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // عرض الصورة فوراً في المنيو (معاينة)
+                    document.getElementById('displayLogo').src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        }
 
-            // تحديث واجهة الزبون فوراً
-            document.getElementById('viewName').innerText = name;
-            document.getElementById('viewSlogan').innerText = slogan;
-            document.getElementById('viewPrice1').innerText = price1 + "ج";
-            document.getElementById('viewPrice2').innerText = price2 + "ج";
-            
-            if(logo) {
-                document.getElementById('viewLogo').src = logo;
+        // وظيفة تحديث المنيو بالكامل
+        function updateMenu() {
+            // سحب القيم من خانات الإدارة
+            const name = document.getElementById('inputName').value;
+            const slogan = document.getElementById('inputSlogan').value;
+            const price1 = document.getElementById('inputPrice1').value;
+            const price2 = document.getElementById('inputPrice2').value;
+
+            // التأكد من إدخال بيانات
+            if(!name || !price1) {
+                alert("برجاء إدخال اسم المطعم والأسعار على الأقل.");
+                return;
             }
 
-            alert("تم تحديث المنيو بنجاح! يمكن للزبائن الآن رؤية التعديلات.");
+            // تطبيق القيم على واجهة الزبون
+            document.getElementById('displayName').innerText = name;
+            document.getElementById('displaySlogan').innerText = slogan;
+            document.getElementById('displayPrice1').innerText = price1 + "ج";
+            document.getElementById('displayPrice2').innerText = price2 + "ج";
+
+            // رسالة نجاح
+            alert("تم تحديث السيستم بنجاح! \n المطعم: " + name + " جاهز الآن للعمل.");
+            
+            // سكرول تلقائي للمنيو عشان يشوف النتيجة
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // قيم افتراضية عند التشغيل لأول مرة
+        window.onload = function() {
+            document.getElementById('inputName').value = "أولاد زكريا";
+            document.getElementById('inputSlogan').value = "أجمد كشري وطواجن في مصر";
+            document.getElementById('inputPrice1').value = "45";
+            document.getElementById('inputPrice2').value = "60";
+            updateMenu();
         }
     </script>
 </body>
