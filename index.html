@@ -2,8 +2,8 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة أولاد أنس - المنيو الشامل</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>منصة أولاد زكريا | النظام المتكامل</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #f27e27; --dark: #0f0f0f; --card: #1a1a1a; --white: #ffffff; }
@@ -11,112 +11,114 @@
         body { background: #000; color: var(--white); overflow-x: hidden; width: 100%; }
 
         /* واجهة الزبون */
-        header { text-align: center; padding: 30px 15px; border-bottom: 3px solid var(--primary); }
-        .logo-box { width: 100px; height: 100px; background: #fff; border-radius: 50%; margin: 0 auto 15px; overflow: hidden; border: 3px solid var(--primary); }
+        header { text-align: center; padding: 30px 15px; border-bottom: 3px solid var(--primary); background: linear-gradient(to bottom, #1a1a1a, #000); }
+        .logo-box { width: 110px; height: 110px; background: #fff; border-radius: 50%; margin: 0 auto 15px; overflow: hidden; border: 4px solid var(--primary); box-shadow: 0 0 15px rgba(242, 126, 39, 0.4); }
         .logo-box img { width: 100%; height: 100%; object-fit: contain; }
         
-        .section-title { color: var(--primary); margin: 25px 20px 10px; border-right: 4px solid var(--primary); padding-right: 10px; font-size: 20px; }
+        .section-title { color: var(--primary); margin: 25px 20px 15px; border-right: 5px solid var(--primary); padding-right: 12px; font-size: 22px; font-weight: 900; }
         .menu-list { padding: 0 15px; max-width: 600px; margin: auto; }
         .menu-card { 
-            background: var(--card); padding: 15px; border-radius: 12px; margin-bottom: 10px; 
+            background: var(--card); padding: 18px; border-radius: 15px; margin-bottom: 12px; 
             display: flex; justify-content: space-between; align-items: center;
-            border: 1px solid #333; cursor: pointer; transition: 0.2s;
+            border: 1px solid #333; cursor: pointer; transition: transform 0.2s, border-color 0.2s;
         }
-        .menu-card:active { transform: scale(0.96); border-color: var(--primary); }
-        .price-tag { color: var(--primary); font-weight: 900; font-size: 19px; }
+        .menu-card:active { transform: scale(0.95); border-color: var(--primary); background: #252525; }
+        .price-tag { color: var(--primary); font-weight: 900; font-size: 21px; }
 
-        /* زر الإرسال الثابت */
+        /* سلة الطلبات الثابتة */
         .order-bar { 
             position: fixed; bottom: 0; left: 0; width: 100%; background: #25d366; color: white;
-            padding: 18px; text-align: center; font-weight: 900; cursor: pointer;
-            display: none; z-index: 1000; font-size: 18px;
+            padding: 20px; text-align: center; font-weight: 900; cursor: pointer;
+            display: none; z-index: 2000; font-size: 18px; box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
         }
 
-        /* لوحة التحكم - تعديل عرض الموبايل */
-        .admin-view { background: #f8f9fa; color: #333; padding: 30px 10px; border-top: 5px solid var(--primary); margin-top: 40px; }
-        .admin-card { max-width: 100%; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .input-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px; }
-        input { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; display: block; }
-        .save-btn { background: var(--primary); color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; font-weight: 900; font-size: 18px; cursor: pointer; }
+        /* لوحة التحكم - إصلاح الـ Layout */
+        .admin-view { background: #f8f9fa; color: #333; padding: 40px 15px; border-top: 6px solid var(--primary); margin-top: 50px; }
+        .admin-card { max-width: 550px; margin: auto; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .input-group { margin-bottom: 20px; width: 100%; }
+        label { display: block; margin-bottom: 8px; font-weight: 700; color: #555; font-size: 15px; }
+        input { 
+            width: 100%; padding: 14px; border: 2px solid #ddd; border-radius: 10px; 
+            font-size: 16px; transition: border-color 0.3s; background: #fff;
+        }
+        input:focus { border-color: var(--primary); outline: none; }
+        .save-btn { 
+            background: var(--primary); color: white; border: none; padding: 18px; 
+            width: 100%; border-radius: 12px; font-weight: 900; font-size: 19px; 
+            cursor: pointer; box-shadow: 0 4px 15px rgba(242, 126, 39, 0.3);
+        }
     </style>
 </head>
 <body>
 
     <div id="clientView">
         <header>
-            <div class="logo-box"><img id="viewLogo" src="https://via.placeholder.com/100" alt="Logo"></div>
+            <div class="logo-box"><img id="viewLogo" src="https://i.imgur.com/8QyVfXY.png" alt="Logo"></div>
             <h1 id="viewName">أولاد زكريا</h1>
-            <p id="viewSlogan" style="color:#888">أجمد كشري وطواجن في مصر</p>
+            <p id="viewSlogan" style="color:#aaa; font-weight: bold;">أصل الكشري والطواجن في مصر</p>
         </header>
 
-        <h2 class="section-title">قسم الكشري</h2>
-        <div class="menu-list" id="kosharyList"></div>
+        <h2 class="section-title">علب الكشري</h2>
+        <div class="menu-list">
+            <div class="menu-card" onclick="addToCart('كشري النخبة (سوبر)', 55)"><span>كشري النخبة (سوبر)</span><span class="price-tag">55ج</span></div>
+            <div class="menu-card" onclick="addToCart('كشري القمة (كبير)', 45)"><span>كشري القمة (كبير)</span><span class="price-tag">45ج</span></div>
+            <div class="menu-card" onclick="addToCart('كشري زكريا (وسط)', 35)"><span>كشري زكريا (وسط)</span><span class="price-tag">35ج</span></div>
+            <div class="menu-card" onclick="addToCart('كشري عادي (صغير)', 25)"><span>كشري عادي (صغير)</span><span class="price-tag">25ج</span></div>
+        </div>
 
-        <h2 class="section-title">قسم الطواجن</h2>
-        <div class="menu-list" id="tagnList"></div>
+        <h2 class="section-title">طواجن الفرن</h2>
+        <div class="menu-list">
+            <div class="menu-card" onclick="addToCart('طاجن فراخ ميكس جبن', 70)"><span>طاجن فراخ ميكس جبن</span><span class="price-tag">70ج</span></div>
+            <div class="menu-card" onclick="addToCart('طاجن لحمة موزة', 65)"><span>طاجن لحمة موزة</span><span class="price-tag">65ج</span></div>
+            <div class="menu-card" onclick="addToCart('طاجن كبدة إسكندراني', 55)"><span>طاجن كبدة إسكندراني</span><span class="price-tag">55ج</span></div>
+            <div class="menu-card" onclick="addToCart('طاجن سادة بالصلصة', 30)"><span>طاجن سادة بالصلصة</span><span class="price-tag">30ج</span></div>
+        </div>
 
-        <h2 class="section-title">قسم الحواوشي</h2>
-        <div class="menu-list" id="hawashiList"></div>
+        <h2 class="section-title">الحواوشي الإسكندراني</h2>
+        <div class="menu-list">
+            <div class="menu-card" onclick="addToCart('حواوشي مخصوص دبل جبنة', 60)"><span>حواوشي مخصوص دبل جبنة</span><span class="price-tag">60ج</span></div>
+            <div class="menu-card" onclick="addToCart('حواوشي لحمة بلدي كبير', 50)"><span>حواوشي لحمة بلدي كبير</span><span class="price-tag">50ج</span></div>
+        </div>
+
+        <h2 class="section-title">الحلو</h2>
+        <div class="menu-list">
+            <div class="menu-card" onclick="addToCart('أرز بلدن فرن', 25)"><span>أرز بلبن فرن</span><span class="price-tag">25ج</span></div>
+            <div class="menu-card" onclick="addToCart('مهلبية بالمكسرات', 20)"><span>مهلبية بالمكسرات</span><span class="price-tag">20ج</span></div>
+        </div>
     </div>
 
     <div class="admin-view">
         <div class="admin-card">
-            <h2 style="text-align:center; color:var(--primary); margin-bottom:20px">⚙️ لوحة التحكم الشاملة</h2>
+            <h2 style="text-align:center; color:var(--primary); margin-bottom:25px; font-weight: 900;">⚙️ لوحة الإدارة الشاملة</h2>
             <div class="input-group">
-                <label>اسم المطعم:</label>
+                <label>اسم المطعم المكتوب للزبائن:</label>
                 <input type="text" id="editName" value="أولاد زكريا">
             </div>
             <div class="input-group">
-                <label>رقم واتساب المطعم:</label>
+                <label>رقم واتساب استقبال الطلبات:</label>
                 <input type="tel" id="editPhone" value="01022101718">
             </div>
             <div class="input-group">
-                <label>تغيير اللوجو:</label>
-                <input type="file" accept="image/*" onchange="updateLogo(event)">
+                <label>تغيير لوجو المطعم (صورة):</label>
+                <input type="file" accept="image/*" onchange="updateLogo(event)" style="border:none; padding: 5px;">
             </div>
             <button class="save-btn" onclick="applyChanges()">حفظ البيانات وتحديث المنيو ✅</button>
+            <p style="text-align:center; margin-top:15px; font-size:13px; color:#777;">جميع التعديلات تظهر فوراً للزبائن عند الحفظ.</p>
         </div>
     </div>
 
     <div class="order-bar" id="orderBar" onclick="sendOrder()">
-        إرسال الطلب (الإجمالي: <span id="total">0</span> ج)
+        🛒 إرسال الطلب (الإجمالي: <span id="total">0</span> ج)
     </div>
 
     <script>
-        const menuData = {
-            koshary: [
-                {n: "كشري النخبة (سوبر)", p: 55}, {n: "كشري القمة (كبير)", p: 45},
-                {n: "كشري وسط", p: 35}, {n: "كشري صغير", p: 25}
-            ],
-            tagn: [
-                {n: "طاجن فراخ ميكس جبن", p: 65}, {n: "طاجن لحمة موزة", p: 60},
-                {n: "طاجن كبدة إسكندراني", p: 50}
-            ],
-            hawashi: [
-                {n: "حواوشي إسكندراني كبير", p: 45}, {n: "حواوشي دبل جبنة", p: 55}
-            ]
-        };
-
         let cart = [];
         let total = 0;
 
-        function renderMenu() {
-            renderSection('kosharyList', menuData.koshary);
-            renderSection('tagnList', menuData.tagn);
-            renderSection('hawashiList', menuData.hawashi);
-        }
-
-        function renderSection(id, items) {
-            const list = document.getElementById(id);
-            list.innerHTML = '';
-            items.forEach(item => {
-                list.innerHTML += `
-                <div class="menu-card" onclick="addToCart('${item.n}', ${item.p})">
-                    <span>${item.n}</span>
-                    <span class="price-tag">${item.p}ج</span>
-                </div>`;
-            });
+        function updateLogo(e) {
+            const reader = new FileReader();
+            reader.onload = () => document.getElementById('viewLogo').src = reader.result;
+            reader.readAsDataURL(e.target.files[0]);
         }
 
         function addToCart(name, price) {
@@ -126,25 +128,18 @@
             document.getElementById('total').innerText = total;
         }
 
-        function updateLogo(e) {
-            const reader = new FileReader();
-            reader.onload = () => document.getElementById('viewLogo').src = reader.result;
-            reader.readAsDataURL(e.target.files[0]);
-        }
-
         function applyChanges() {
             document.getElementById('viewName').innerText = document.getElementById('editName').value;
-            alert("تم التحديث! المنيو الآن يحتوي على كافة الأصناف.");
+            alert("تم حفظ التعديلات وتحديث النظام بنجاح! ✅");
             window.scrollTo({top: 0, behavior: 'smooth'});
         }
 
         function sendOrder() {
             const phone = document.getElementById('editPhone').value;
-            const msg = `*طلب جديد من ${document.getElementById('viewName').innerText}*%0A*الطلبات:* ${cart.join(' + ')}%0A*الإجمالي:* ${total}ج`;
-            window.open(`https://wa.me/2${phone}?text=${msg}`);
+            const restaurant = document.getElementById('viewName').innerText;
+            const message = `*طلب جديد من: ${restaurant}*%0A--------------------------%0A*الطلبات:*%0A- ${cart.join('%0A- ')}%0A--------------------------%0A*الإجمالي:* ${total} جنيه`;
+            window.open(`https://wa.me/2${phone}?text=${message}`);
         }
-
-        renderMenu();
     </script>
 </body>
 </html>
