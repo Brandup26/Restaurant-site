@@ -2,127 +2,41 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة إدارة المنيو الذكية | Pro Menu System</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>لوحة تحكم صاحب المطعم</title>
     <style>
-        :root { --main: #2ecc71; --dark: #121212; --card: #1e1e1e; --gold: #f1c40f; }
-        body { font-family: 'Tajawal', sans-serif; background: var(--dark); color: white; }
-        
-        /* واجهة صاحب المطعم (التعديل اللحظي) */
-        .admin-panel { background: #222; padding: 15px; border-bottom: 2px solid var(--main); margin-bottom: 20px; }
-        .admin-panel input { padding: 8px; border-radius: 5px; border: none; margin: 5px; }
-
-        /* المنيو الاحترافي */
-        .menu-container { max-width: 800px; margin: auto; padding: 20px; }
-        .restaurant-header { text-align: center; padding: 30px; background: var(--card); border-radius: 20px; margin-bottom: 20px; border: 1px solid #333; }
-        .logo-placeholder { width: 100px; height: 100px; background: #fff; border-radius: 50%; margin: 0 auto 15px; overflow: hidden; }
-        .logo-placeholder img { width: 100%; height: 100%; object-fit: contain; }
-
-        .category-title { color: var(--main); border-right: 4px solid var(--main); padding-right: 15px; margin: 30px 0 15px; font-size: 22px; }
-        
-        .item-card { 
-            background: var(--card); padding: 15px; border-radius: 15px; margin-bottom: 15px;
-            display: flex; justify-content: space-between; align-items: center;
-            transition: 0.3s; border: 1px solid #333;
-        }
-        .item-card:hover { transform: scale(1.02); border-color: var(--main); }
-        .price { color: var(--gold); font-weight: 900; font-size: 20px; }
-        
-        .add-btn { background: var(--main); border: none; color: white; width: 40px; height: 40px; border-radius: 10px; cursor: pointer; font-size: 20px; }
-
-        /* سلة الطلبات المتطورة */
-        .cart-overlay { 
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            width: 90%; max-width: 500px; background: white; color: black;
-            padding: 15px 25px; border-radius: 50px; display: none;
-            justify-content: space-between; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        .checkout-btn { background: #25d366; color: white; border: none; padding: 10px 20px; border-radius: 25px; cursor: pointer; font-weight: bold; }
+        body { font-family: Arial; padding: 20px; background: #f4f4f4; text-align: right; }
+        .admin-box { background: white; padding: 20px; border-radius: 10px; max-width: 500px; margin: auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h2 { color: #2ecc71; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        label { display: block; margin-top: 15px; font-weight: bold; }
+        input { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 5px; }
+        .save-btn { background: #2ecc71; color: white; border: none; padding: 15px; width: 100%; margin-top: 20px; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="admin-panel" id="adminPanel">
-    <h4 style="margin-bottom:10px; color: var(--main);">لوحة تحكم المطعم (Demo)</h4>
-    <input type="text" id="storeNameInput" placeholder="اسم المطعم" oninput="updateBrand()">
-    <input type="text" id="whatsappInput" placeholder="رقم الواتساب">
-</div>
+<div class="admin-box">
+    <h2>تعديل بيانات المطعم</h2>
+    
+    <label>اسم المطعم المكتوب للزبائن:</label>
+    <input type="text" id="storeName" value="أولاد زكريا">
 
-<div class="menu-container">
-    <div class="restaurant-header">
-        <div class="logo-placeholder"><img id="storeLogo" src="https://via.placeholder.com/100" alt="Logo"></div>
-        <h1 id="storeName">اسم المطعم</h1>
-        <p id="storeStatus" style="color: #888;">مفتوح الآن - نظام طلبات إلكتروني</p>
-    </div>
+    <label>رقم الواتساب لاستقبال الطلبات:</label>
+    <input type="text" id="storePhone" value="01022101718">
 
-    <div id="menuSections">
-        </div>
-</div>
+    <label>تعديل سعر (كشري جامبو):</label>
+    <input type="number" id="itemPrice" value="45">
 
-<div class="cart-overlay" id="cartOverlay">
-    <div>السلة: <span id="cartCount">0</span> أصناف | الإجمالي: <span id="cartTotal">0</span> ج</div>
-    <button class="checkout-btn" onclick="sendToWhatsApp()">إرسال الطلب</button>
+    <button class="save-btn" onclick="saveData()">حفظ التعديلات الآن ✅</button>
 </div>
 
 <script>
-    // بيانات افتراضية للمطعم (يمكن تعديلها من الداشبورد)
-    let restaurantData = {
-        name: "أولاد زكريا",
-        phone: "201022101718",
-        categories: [
-            { name: "الكشري", items: [ {n: "كشري جامبو", p: 45}, {n: "كشري سبيشيال", p: 55} ] },
-            { name: "الطواجن", items: [ {n: "طاجن فراخ ميكس", p: 65}, {n: "طاجن لحمة", p: 50} ] }
-        ]
-    };
-
-    let cart = [];
-
-    function initMenu() {
-        const container = document.getElementById('menuSections');
-        container.innerHTML = '';
-        restaurantData.categories.forEach(cat => {
-            let html = `<div class="category-title">${cat.name}</div>`;
-            cat.items.forEach(item => {
-                html += `
-                <div class="item-card">
-                    <div><h3>${item.n}</h3></div>
-                    <div style="text-align:left">
-                        <span class="price">${item.p}ج</span>
-                        <button class="add-btn" onclick="addToCart('${item.n}', ${item.p})">+</button>
-                    </div>
-                </div>`;
-            });
-            container.innerHTML += html;
-        });
-        document.getElementById('storeName').innerText = restaurantData.name;
+    function saveData() {
+        const name = document.getElementById('storeName').value;
+        const price = document.getElementById('itemPrice').value;
+        alert("تم الحفظ بنجاح! \n الآن اسم المطعم: " + name + "\n سعر الكشري أصبح: " + price + "ج");
+        // هنا في الحقيقة بنبعت البيانات دي لقاعدة البيانات
     }
-
-    function addToCart(name, price) {
-        cart.push({name, price});
-        updateCartUI();
-    }
-
-    function updateCartUI() {
-        document.getElementById('cartOverlay').style.display = 'flex';
-        document.getElementById('cartCount').innerText = cart.length;
-        const total = cart.reduce((s, i) => s + i.price, 0);
-        document.getElementById('cartTotal').innerText = total;
-    }
-
-    function updateBrand() {
-        const newName = document.getElementById('storeNameInput').value;
-        if(newName) document.getElementById('storeName').innerText = newName;
-    }
-
-    function sendToWhatsApp() {
-        const total = cart.reduce((s, i) => s + i.price, 0);
-        let itemsList = cart.map(i => i.name).join(' + ');
-        let msg = `*طلب جديد*%0A*المطعم:* ${restaurantData.name}%0A*الطلبات:* ${itemsList}%0A*الإجمالي:* ${total} ج`;
-        window.open(`https://wa.me/${restaurantData.phone}?text=${msg}`);
-    }
-
-    initMenu();
 </script>
+
 </body>
 </html>
