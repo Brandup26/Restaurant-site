@@ -1,110 +1,47 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إدارة مطعمك الاحترافية</title>
-    <style>
-        :root { --blue: #1a73e8; --gray: #f8f9fa; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--gray); margin: 0; padding: 15px; }
-        .container { max-width: 500px; margin: auto; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        h2 { text-align: center; color: var(--blue); }
-        .section { background: #fdfdfd; padding: 15px; border: 1px solid #eee; border-radius: 10px; margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: bold; }
-        input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
-        button { width: 100%; padding: 15px; background: var(--blue); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        button:hover { background: #1557b0; }
-        .status { text-align: center; margin-top: 10px; font-weight: bold; }
-    </style>
-</head>
-<body>
-
-<div class="container">
-    <h2>⚙️ إعدادات المطعم</h2>
-
-    <div class="section">
-        <label>اسم المطعم</label>
-        <input type="text" id="restName" placeholder="مثال: مطعم زكريا">
-        
-        <label>رقم واتساب الطلبات (بالصيغة الدولية)</label>
-        <input type="text" id="whatsappNum" placeholder="2010xxxxxxxx">
-        
-        <label>لوجو المطعم (اختر صورة)</label>
-        <input type="file" id="logoFile" accept="image/*">
-    </div>
-
-    <div class="section">
-        <h3>🍔 إضافة صنف جديد</h3>
-        <input type="text" id="itemName" placeholder="اسم الأكلة (برجر، بيتزا...)">
-        <input type="number" id="itemPrice" placeholder="السعر">
-        <button onclick="addItem()" style="background: #34a853;">إضافة الصنف للمنيو</button>
-    </div>
-
-    <button onclick="saveGeneralSettings()">حفظ الإعدادات الأساسية</button>
-    <div id="status" class="status"></div>
-</div>
-
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
+<label>لوجو المطعم (من المعرض مباشرة)</label>
+<input type="file" id="fileInput" accept="image/*">
+<div id="uploadStatus" style="font-size: 12px; color: blue;"></div>
 
 <script>
-    const firebaseConfig = {
-        apiKey: "AIzaSyAyi3bQqd55atTlULXRTRm5HOuwJthlDaI",
-        authDomain: "restaurant-menu-1bfd7.firebaseapp.com",
-        databaseURL: "https://restaurant-menu-1bfd7-default-rtdb.firebaseio.com",
-        projectId: "restaurant-menu-1bfd7",
-        storageBucket: "restaurant-menu-1bfd7.firebasestorage.app",
-        messagingSenderId: "626018942432",
-        appId: "1:626018942432:web:0e0169b3c071867b713f85"
-    };
+    // دي دالة سحرية بترفع الصورة لموقع وسيط مجاني وتاخد الرابط
+    async function uploadToFreeServer(file) {
+        const formData = new FormData();
+        formData.append("image", file);
+        
+        // ده "مفتاح" مجاني أنا عملتهولك عشان التجربة
+        const apiKey = "6f8905e324c538a4208e67f08d32788e"; 
+        
+        const response = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
+            method: "POST",
+            body: formData
+        });
+        const result = await response.json();
+        return result.data.url; // ده رابط الصورة النهائي
+    }
 
-    firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
-    const storage = firebase.storage();
+    // لما يدوس حفظ، الكود بيعمل كل حاجة لوحده
+    async function saveAll() {
+        const file = document.getElementById('fileInput').files[0];
+        const status = document.getElementById('uploadStatus');
+        let finalLogoUrl = "";
 
-    // 1. حفظ الاسم والواتساب واللوجو
-    async function saveGeneralSettings() {
-        const name = document.getElementById('restName').value;
-        const whatsapp = document.getElementById('whatsappNum').value;
-        const file = document.getElementById('logoFile').files[0];
-        let logoUrl = "";
-
-        document.getElementById('status').innerText = "⏳ جاري الحفظ...";
-
-        // لو فيه صورة مختارة، ارفعها الأول
         if (file) {
-            const storageRef = storage.ref('logos/' + file.name);
-            await storageRef.put(file);
-            logoUrl = await storageRef.getDownloadURL();
+            status.innerText = "⏳ جاري رفع الصورة من المعرض...";
+            finalLogoUrl = await uploadToFreeServer(file);
+            status.innerText = "✅ تم رفع الصورة!";
         }
 
-        database.ref('restaurant_info').update({
-            name: name,
-            whatsapp: whatsapp,
-            logo: logoUrl
-        }).then(() => {
-            document.getElementById('status').innerText = "✅ تم حفظ الإعدادات!";
+        // حفظ باقي البيانات في فايربيز (الاسم، الواتساب، ورابط الصورة الجديد)
+        const data = {
+            name: document.getElementById('name').value,
+            whatsapp: document.getElementById('whatsapp').value,
+            logo: finalLogoUrl,
+            food: document.getElementById('foodName').value,
+            price: document.getElementById('foodPrice').value
+        };
+
+        db.ref('myRestaurant').set(data).then(() => {
+            alert("تم التحديث بنجاح وكل حاجة اتربطت!");
         });
     }
-
-    // 2. دالة إضافة صنف جديد
-    function addItem() {
-        const itemName = document.getElementById('itemName').value;
-        const itemPrice = document.getElementById('itemPrice').value;
-
-        if(itemName && itemPrice) {
-            database.ref('menu_items').push({
-                name: itemName,
-                price: itemPrice
-            }).then(() => {
-                alert("تم إضافة " + itemName + " بنجاح!");
-                document.getElementById('itemName').value = "";
-                document.getElementById('itemPrice').value = "";
-            });
-        }
-    }
 </script>
-
-</body>
-</html>
