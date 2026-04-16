@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة إدارة سهلة</title>
+    <style>
+        :root { --blue: #1a73e8; --bg: #f0f2f5; }
+        body { font-family: sans-serif; background: var(--bg); padding: 20px; text-align: center; }
+        .container { background: white; max-width: 450px; margin: auto; padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .section { background: #fdfdfd; padding: 15px; border: 1px solid #eee; border-radius: 10px; margin-bottom: 20px; }
+        input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
+        button { width: 100%; padding: 15px; background: var(--blue); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .add-btn { background: #34a853; }
+        #status { margin-top: 15px; font-weight: bold; color: #d93025; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>⚙️ لوحة تحكم المطعم</h2>
+    
+    <div class="section">
+        <label><b>تحديث بيانات المطعم</b></label><br><br>
+        <input type="text" id="resName" placeholder="اسم المطعم">
+        <input type="text" id="resWhatsapp" placeholder="رقم واتساب الطلبات">
+        <label>اختيار اللوجو من المعرض:</label>
+        <input type="file" id="logoFile" accept="image/*">
+        <button onclick="uploadAndSaveInfo()">حفظ البيانات واللوجو</button>
+    </div>
+
+    <div class="section">
+        <h3>🍔 إضافة صنف جديد</h3>
+        <input type="text" id="itemName" placeholder="اسم الأكلة">
+        <input type="number" id="itemPrice" placeholder="السعر">
+        <label>صورة الصنف (اختياري):</label>
+        <input type="file" id="itemFile" accept="image/*">
+        <button class="add-btn" onclick="uploadAndAddItem()">إضافة الصنف للمنيو</button>
+    </div>
+    <div id="status"></div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyAyi3bQqd55atTlULXRTRm5HOuwJthlDaI",
+        authDomain: "restaurant-menu-1bfd7.firebaseapp.com",
+        databaseURL: "https://restaurant-menu-1bfd7-default-rtdb.firebaseio.com",
+        projectId: "restaurant-menu-1bfd7",
+        storageBucket: "restaurant-menu-1bfd7.firebasestorage.app",
+        messagingSenderId: "626018942432",
+        appId: "1:626018942432:web:0e0169b3c071867b713f85"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // دالة سحرية ترفع الصورة وتاخد الرابط المباشر لوحدها
+    async function uploadToImgBB(file) {
+        const formData = new FormData();
+        formData.append("image", file);
+        const res = await fetch("https://api.imgbb.com/1/upload?key=6f8905e324c538a4208e67f08d32788e", {
+            method: "POST",
+            body: formData
+        });
+        const json = await res.json();
+        return json.data.url; // ده الرابط المباشر اللي كان مدوخنا!
+    }
+
+    async function uploadAndSaveInfo() {
+        const status = document.getElementById('status');
+        const file = document.getElementById('logoFile').files[0];
+        status.innerText = "⏳ جاري الحفظ.. انتظر ثواني";
+        
+        let url = "";
+        if(file) url = await uploadToImgBB(file);
+
+        db.ref('restaurant_info').update({
+            name: document.getElementById('resName').value,
+            whatsapp: document.getElementById('resWhatsapp').value,
+            ...(url && {logo: url})
+        }).then(() => { status.innerText = "✅ تم تحديث البيانات بنجاح!"; });
+    }
+
+    async function uploadAndAddItem() {
+        const status = document.getElementById('status');
+        const file = document.getElementById('itemFile').files[0];
+        const name = document.getElementById('itemName').value;
+        const price = document.getElementById('itemPrice').value;
+
+        if(!name || !price) return alert("اكتب الاسم والسعر!");
+
+        status.innerText = "⏳ جاري إضافة الصنف..";
+        
+        let url = "";
+        if(file) url = await uploadToImgBB(file);
+
+        db.ref('menu_items').push({
+            name: name,
+            price: price,
+            image: url
+        }).then(() => {
+            status.innerText = "✅ تم إضافة " + name + " للمنيو!";
+            document.getElementById('itemName').value = "";
+            document.getElementById('itemPrice').value = "";
+        });
+    }
+</script>
+</body>
+</html>
