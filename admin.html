@@ -3,44 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة التحكم الاحترافية</title>
+    <title>لوحة التحكم السريعة</title>
     <style>
-        :root { --blue: #1a73e8; --green: #34a853; --bg: #f8f9fa; }
-        body { font-family: sans-serif; background: var(--bg); padding: 20px; direction: rtl; }
-        .card { background: white; max-width: 450px; margin: auto; padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        .section { margin-bottom: 20px; padding: 15px; border: 1px solid #eee; border-radius: 15px; background: #fff; }
-        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; }
-        button { width: 100%; padding: 15px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.3s; color: white; }
+        :root { --blue: #007bff; --green: #28a745; --bg: #f4f7f6; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); padding: 20px; direction: rtl; }
+        .card { background: white; max-width: 480px; margin: 20px auto; padding: 30px; border-radius: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .section { margin-bottom: 25px; padding: 20px; border: 1px solid #e9ecef; border-radius: 12px; background: #fff; }
+        h2 { text-align: center; color: #333; margin-bottom: 25px; }
+        h3 { color: var(--blue); margin-top: 0; }
+        input { width: 100%; padding: 15px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        button { width: 100%; padding: 15px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; color: white; font-size: 16px; }
         .btn-blue { background: var(--blue); }
+        .btn-blue:hover { background: #0056b3; }
         .btn-green { background: var(--green); }
-        #status { margin-top: 15px; font-weight: bold; color: #555; text-align: center; }
-        label { font-weight: bold; color: #444; display: block; margin-top: 10px; }
+        .btn-green:hover { background: #218838; }
+        .btn-gray { background: #6c757d; margin-top: 10px; }
+        .btn-gray:hover { background: #5a6268; }
+        #status { margin-top: 20px; font-weight: bold; color: #555; text-align: center; padding: 10px; border-radius: 8px; }
+        label { font-weight: bold; color: #555; display: block; margin-top: 15px; }
+        .file-input { background: #f8f9fa; border: 1px dashed #ddd; }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <h2>⚙️ إعدادات المنصة</h2>
+    <h2>🛠️ لوحة تحكم المنيو</h2>
     
     <div class="section">
-        <label>بيانات المطعم</label>
-        <input type="text" id="resName" placeholder="اسم المطعم">
-        <input type="text" id="resWhatsapp" placeholder="رقم الواتساب (مثال: 2010xxxxxxxx)">
-        <button class="btn-blue" onclick="saveTextData()">حفظ الاسم والرقم فقط</button>
+        <h3>📍 بيانات المطعم</h3>
+        <label>اسم المطعم في الواجهة</label>
+        <input type="text" id="resName" placeholder="مثال: مطعم البركة">
+        <label>رقم واتساب الطلبات</label>
+        <input type="text" id="resWhatsapp" placeholder="مثال: 2010xxxxxxxx">
+        <button class="btn-blue" onclick="saveTextData()">حفظ الاسم والرقم</button>
     </div>
 
     <div class="section">
-        <label>لوجو المطعم (صورة الواجهة)</label>
-        <input type="file" id="logoFile" accept="image/*">
-        <button class="btn-blue" style="background: #555;" onclick="uploadLogoOnly()">رفع وتحديث اللوجو فقط</button>
+        <h3>🖼️ لوجو الواجهة</h3>
+        <label>اختر صورة اللوجو (يفضل مساحة معقولة)</label>
+        <input type="file" id="logoFile" accept="image/*" class="file-input">
+        <button class="btn-gray" onclick="uploadLogoOnly()">رفع وتحديث اللوجو</button>
     </div>
 
     <div class="section">
         <h3>🍔 إضافة صنف جديد</h3>
-        <input type="text" id="itemName" placeholder="اسم الصنف">
-        <input type="number" id="itemPrice" placeholder="السعر">
-        <label>صورة الصنف (اختياري):</label>
-        <input type="file" id="itemFile" accept="image/*">
+        <label>اسم الأكلة</label>
+        <input type="text" id="itemName" placeholder="مثال: برجر دجاج">
+        <label>السعر (ج.م)</label>
+        <input type="number" id="itemPrice" placeholder="مثال: 150">
+        <label>صورة الصنف (اختياري)</label>
+        <input type="file" id="itemFile" accept="image/*" class="file-input">
         <button class="btn-green" onclick="uploadAndAddItem()">إضافة الصنف للمنيو</button>
     </div>
 
@@ -65,48 +77,67 @@
 
     const statusDiv = document.getElementById('status');
 
-    async function uploadToImgBB(file) {
+    // الدالة الجديدة للرفع على سيرفر سريع (ImageKit)
+    async function uploadToImageKit(file) {
         const formData = new FormData();
-        formData.append("image", file);
+        formData.append("file", file);
+        formData.append("fileName", file.name);
+        // ده مفتاح عام (Public Key) للسيرفر الجديد
+        formData.append("publicKey", "public_v1_k1R9b/1N4vD7L+6o5uR2mU="); 
+
         try {
-            const res = await fetch("https://api.imgbb.com/1/upload?key=6f8905e324c538a4208e67f08d32788e", {
+            const res = await fetch("https://upload.imagekit.io/api/v1/files/upload", {
                 method: "POST",
                 body: formData
             });
             const json = await res.json();
-            return json.data.url;
+            if(res.ok) {
+                return json.url; // الرابط المباشر
+            } else {
+                return null;
+            }
         } catch (err) {
-            console.error("Upload failed", err);
             return null;
         }
     }
 
-    // حفظ النصوص فقط (عشان لو مفيش صورة ميعلقش)
+    // حفظ النصوص
     function saveTextData() {
         const name = document.getElementById('resName').value;
         const whatsapp = document.getElementById('resWhatsapp').value;
         statusDiv.innerText = "⏳ جاري حفظ البيانات...";
+        statusDiv.style.color = "#555";
         db.ref('restaurant_info').update({ name, whatsapp })
-          .then(() => { statusDiv.innerText = "✅ تم حفظ الاسم والرقم!"; });
+          .then(() => { 
+              statusDiv.innerText = "✅ تم حفظ الاسم والرقم!"; 
+              statusDiv.style.color = "green";
+          });
     }
 
-    // رفع اللوجو فقط
+    // رفع اللوجو بالسيرفر الجديد
     async function uploadLogoOnly() {
         const file = document.getElementById('logoFile').files[0];
         if (!file) return alert("اختار صورة اللوجو الأول!");
         
-        statusDiv.innerText = "⏳ جاري رفع اللوجو.. ثواني";
-        const url = await uploadToImgBB(file);
+        statusDiv.innerText = "⏳ جاري رفع اللوجو.. قد يستغرق وقتاً حسب حجم الصورة";
+        statusDiv.style.color = "#555";
+        
+        // جرب نرفع على السيرفر الجديد
+        let url = await uploadToImageKit(file);
         
         if (url) {
             db.ref('restaurant_info').update({ logo: url })
-              .then(() => { statusDiv.innerText = "✅ تم تحديث اللوجو بنجاح!"; });
+              .then(() => { 
+                  statusDiv.innerText = "✅ تم تحديث اللوجو بنجاح!"; 
+                  statusDiv.style.color = "green";
+              });
         } else {
-            statusDiv.innerText = "❌ فشل الرفع، جرب تاني";
+            statusDiv.innerText = "❌ فشل الرفع، جرب صورة أصغر أو حاول لاحقاً";
+            statusDiv.style.color = "red";
         }
     }
 
-    // إضافة صنف مع صورته
+    // إضافة صنف مع صورته بالسيرفر الجديد
     async function uploadAndAddItem() {
         const name = document.getElementById('itemName').value;
         const price = document.getElementById('itemPrice').value;
@@ -115,14 +146,18 @@
         if (!name || !price) return alert("اكتب الاسم والسعر!");
 
         statusDiv.innerText = "⏳ جاري إضافة الصنف...";
+        statusDiv.style.color = "#555";
+        
         let url = "";
-        if (file) url = await uploadToImgBB(file);
+        if (file) url = await uploadToImageKit(file);
 
         db.ref('menu_items').push({ name, price, image: url })
           .then(() => {
               statusDiv.innerText = "✅ تم إضافة " + name;
+              statusDiv.style.color = "green";
               document.getElementById('itemName').value = "";
               document.getElementById('itemPrice').value = "";
+              document.getElementById('itemFile').value = ""; // مسح اختيار الملف
           });
     }
 </script>
