@@ -3,40 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة إدارة سهلة</title>
+    <title>لوحة التحكم الاحترافية</title>
     <style>
-        :root { --blue: #1a73e8; --bg: #f0f2f5; }
-        body { font-family: sans-serif; background: var(--bg); padding: 20px; text-align: center; }
-        .container { background: white; max-width: 450px; margin: auto; padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .section { background: #fdfdfd; padding: 15px; border: 1px solid #eee; border-radius: 10px; margin-bottom: 20px; }
-        input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
-        button { width: 100%; padding: 15px; background: var(--blue); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
-        .add-btn { background: #34a853; }
-        #status { margin-top: 15px; font-weight: bold; color: #d93025; }
+        :root { --blue: #1a73e8; --green: #34a853; --bg: #f8f9fa; }
+        body { font-family: sans-serif; background: var(--bg); padding: 20px; direction: rtl; }
+        .card { background: white; max-width: 450px; margin: auto; padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .section { margin-bottom: 20px; padding: 15px; border: 1px solid #eee; border-radius: 15px; background: #fff; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; }
+        button { width: 100%; padding: 15px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.3s; color: white; }
+        .btn-blue { background: var(--blue); }
+        .btn-green { background: var(--green); }
+        #status { margin-top: 15px; font-weight: bold; color: #555; text-align: center; }
+        label { font-weight: bold; color: #444; display: block; margin-top: 10px; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>⚙️ لوحة تحكم المطعم</h2>
+<div class="card">
+    <h2>⚙️ إعدادات المنصة</h2>
     
     <div class="section">
-        <label><b>تحديث بيانات المطعم</b></label><br><br>
+        <label>بيانات المطعم</label>
         <input type="text" id="resName" placeholder="اسم المطعم">
-        <input type="text" id="resWhatsapp" placeholder="رقم واتساب الطلبات">
-        <label>اختيار اللوجو من المعرض:</label>
+        <input type="text" id="resWhatsapp" placeholder="رقم الواتساب (مثال: 2010xxxxxxxx)">
+        <button class="btn-blue" onclick="saveTextData()">حفظ الاسم والرقم فقط</button>
+    </div>
+
+    <div class="section">
+        <label>لوجو المطعم (صورة الواجهة)</label>
         <input type="file" id="logoFile" accept="image/*">
-        <button onclick="uploadAndSaveInfo()">حفظ البيانات واللوجو</button>
+        <button class="btn-blue" style="background: #555;" onclick="uploadLogoOnly()">رفع وتحديث اللوجو فقط</button>
     </div>
 
     <div class="section">
         <h3>🍔 إضافة صنف جديد</h3>
-        <input type="text" id="itemName" placeholder="اسم الأكلة">
+        <input type="text" id="itemName" placeholder="اسم الصنف">
         <input type="number" id="itemPrice" placeholder="السعر">
         <label>صورة الصنف (اختياري):</label>
         <input type="file" id="itemFile" accept="image/*">
-        <button class="add-btn" onclick="uploadAndAddItem()">إضافة الصنف للمنيو</button>
+        <button class="btn-green" onclick="uploadAndAddItem()">إضافة الصنف للمنيو</button>
     </div>
+
     <div id="status"></div>
 </div>
 
@@ -56,55 +63,67 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // دالة سحرية ترفع الصورة وتاخد الرابط المباشر لوحدها
+    const statusDiv = document.getElementById('status');
+
     async function uploadToImgBB(file) {
         const formData = new FormData();
         formData.append("image", file);
-        const res = await fetch("https://api.imgbb.com/1/upload?key=6f8905e324c538a4208e67f08d32788e", {
-            method: "POST",
-            body: formData
-        });
-        const json = await res.json();
-        return json.data.url; // ده الرابط المباشر اللي كان مدوخنا!
+        try {
+            const res = await fetch("https://api.imgbb.com/1/upload?key=6f8905e324c538a4208e67f08d32788e", {
+                method: "POST",
+                body: formData
+            });
+            const json = await res.json();
+            return json.data.url;
+        } catch (err) {
+            console.error("Upload failed", err);
+            return null;
+        }
     }
 
-    async function uploadAndSaveInfo() {
-        const status = document.getElementById('status');
+    // حفظ النصوص فقط (عشان لو مفيش صورة ميعلقش)
+    function saveTextData() {
+        const name = document.getElementById('resName').value;
+        const whatsapp = document.getElementById('resWhatsapp').value;
+        statusDiv.innerText = "⏳ جاري حفظ البيانات...";
+        db.ref('restaurant_info').update({ name, whatsapp })
+          .then(() => { statusDiv.innerText = "✅ تم حفظ الاسم والرقم!"; });
+    }
+
+    // رفع اللوجو فقط
+    async function uploadLogoOnly() {
         const file = document.getElementById('logoFile').files[0];
-        status.innerText = "⏳ جاري الحفظ.. انتظر ثواني";
+        if (!file) return alert("اختار صورة اللوجو الأول!");
         
-        let url = "";
-        if(file) url = await uploadToImgBB(file);
-
-        db.ref('restaurant_info').update({
-            name: document.getElementById('resName').value,
-            whatsapp: document.getElementById('resWhatsapp').value,
-            ...(url && {logo: url})
-        }).then(() => { status.innerText = "✅ تم تحديث البيانات بنجاح!"; });
+        statusDiv.innerText = "⏳ جاري رفع اللوجو.. ثواني";
+        const url = await uploadToImgBB(file);
+        
+        if (url) {
+            db.ref('restaurant_info').update({ logo: url })
+              .then(() => { statusDiv.innerText = "✅ تم تحديث اللوجو بنجاح!"; });
+        } else {
+            statusDiv.innerText = "❌ فشل الرفع، جرب تاني";
+        }
     }
 
+    // إضافة صنف مع صورته
     async function uploadAndAddItem() {
-        const status = document.getElementById('status');
-        const file = document.getElementById('itemFile').files[0];
         const name = document.getElementById('itemName').value;
         const price = document.getElementById('itemPrice').value;
+        const file = document.getElementById('itemFile').files[0];
 
-        if(!name || !price) return alert("اكتب الاسم والسعر!");
+        if (!name || !price) return alert("اكتب الاسم والسعر!");
 
-        status.innerText = "⏳ جاري إضافة الصنف..";
-        
+        statusDiv.innerText = "⏳ جاري إضافة الصنف...";
         let url = "";
-        if(file) url = await uploadToImgBB(file);
+        if (file) url = await uploadToImgBB(file);
 
-        db.ref('menu_items').push({
-            name: name,
-            price: price,
-            image: url
-        }).then(() => {
-            status.innerText = "✅ تم إضافة " + name + " للمنيو!";
-            document.getElementById('itemName').value = "";
-            document.getElementById('itemPrice').value = "";
-        });
+        db.ref('menu_items').push({ name, price, image: url })
+          .then(() => {
+              statusDiv.innerText = "✅ تم إضافة " + name;
+              document.getElementById('itemName').value = "";
+              document.getElementById('itemPrice').value = "";
+          });
     }
 </script>
 </body>
