@@ -3,57 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة التحكم السريعة</title>
+    <title>لوحة التحكم الخارقة</title>
     <style>
-        :root { --blue: #007bff; --green: #28a745; --bg: #f4f7f6; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); padding: 20px; direction: rtl; }
-        .card { background: white; max-width: 480px; margin: 20px auto; padding: 30px; border-radius: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-        .section { margin-bottom: 25px; padding: 20px; border: 1px solid #e9ecef; border-radius: 12px; background: #fff; }
-        h2 { text-align: center; color: #333; margin-bottom: 25px; }
-        h3 { color: var(--blue); margin-top: 0; }
-        input { width: 100%; padding: 15px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        button { width: 100%; padding: 15px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; color: white; font-size: 16px; }
-        .btn-blue { background: var(--blue); }
-        .btn-blue:hover { background: #0056b3; }
-        .btn-green { background: var(--green); }
-        .btn-green:hover { background: #218838; }
-        .btn-gray { background: #6c757d; margin-top: 10px; }
-        .btn-gray:hover { background: #5a6268; }
-        #status { margin-top: 20px; font-weight: bold; color: #555; text-align: center; padding: 10px; border-radius: 8px; }
-        label { font-weight: bold; color: #555; display: block; margin-top: 15px; }
-        .file-input { background: #f8f9fa; border: 1px dashed #ddd; }
+        :root { --primary: #000; --accent: #ff4757; --bg: #f1f2f6; }
+        body { font-family: sans-serif; background: var(--bg); padding: 15px; direction: rtl; text-align: center; }
+        .box { background: #fff; max-width: 450px; margin: auto; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .card { background: #fafafa; padding: 15px; border-radius: 15px; border: 2px dashed #ddd; margin-bottom: 20px; }
+        input { width: 100%; padding: 15px; margin: 10px 0; border: 1px solid #ddd; border-radius: 10px; font-size: 16px; box-sizing: border-box; }
+        button { width: 100%; padding: 18px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px; transition: 0.2s; background: var(--primary); color: #fff; }
+        button:active { transform: scale(0.98); }
+        #status { margin-top: 20px; font-weight: bold; padding: 10px; color: #555; border-radius: 8px; }
+        .loading { animation: blink 1s infinite; }
+        @keyframes blink { 50% { opacity: 0.5; } }
     </style>
 </head>
 <body>
 
-<div class="card">
-    <h2>🛠️ لوحة تحكم المنيو</h2>
+<div class="box">
+    <h2 style="color: var(--accent);">🚀 نظام الإدارة الفوري</h2>
     
-    <div class="section">
-        <h3>📍 بيانات المطعم</h3>
-        <label>اسم المطعم في الواجهة</label>
-        <input type="text" id="resName" placeholder="مثال: مطعم البركة">
-        <label>رقم واتساب الطلبات</label>
-        <input type="text" id="resWhatsapp" placeholder="مثال: 2010xxxxxxxx">
-        <button class="btn-blue" onclick="saveTextData()">حفظ الاسم والرقم</button>
+    <div class="card">
+        <input type="text" id="resName" placeholder="اسم المطعم">
+        <input type="text" id="resWhatsapp" placeholder="رقم الواتساب">
+        <button onclick="saveInfo()">1. حفظ البيانات الأساسية</button>
     </div>
 
-    <div class="section">
-        <h3>🖼️ لوجو الواجهة</h3>
-        <label>اختر صورة اللوجو (يفضل مساحة معقولة)</label>
-        <input type="file" id="logoFile" accept="image/*" class="file-input">
-        <button class="btn-gray" onclick="uploadLogoOnly()">رفع وتحديث اللوجو</button>
+    <div class="card">
+        <label><b>اللوجو أو صورة الصنف</b></label>
+        <input type="file" id="anyFile" accept="image/*">
+        <p style="font-size: 12px; color: #888;">* هيرفع أي صورة مهما كان حجمها</p>
+        
+        <div style="display: flex; gap: 10px;">
+            <button style="background: #2f3542;" onclick="uploadSmart('logo')">تحديث اللوجو</button>
+            <button style="background: #2ed573;" onclick="uploadSmart('item')">إضافة كصنف</button>
+        </div>
     </div>
 
-    <div class="section">
-        <h3>🍔 إضافة صنف جديد</h3>
-        <label>اسم الأكلة</label>
-        <input type="text" id="itemName" placeholder="مثال: برجر دجاج">
-        <label>السعر (ج.م)</label>
-        <input type="number" id="itemPrice" placeholder="مثال: 150">
-        <label>صورة الصنف (اختياري)</label>
-        <input type="file" id="itemFile" accept="image/*" class="file-input">
-        <button class="btn-green" onclick="uploadAndAddItem()">إضافة الصنف للمنيو</button>
+    <div id="itemFields" style="display: none;" class="card">
+        <input type="text" id="itemName" placeholder="اسم الأكلة">
+        <input type="number" id="itemPrice" placeholder="السعر">
+        <button onclick="finalAddItem()">تأكيد إضافة الصنف</button>
     </div>
 
     <div id="status"></div>
@@ -75,90 +64,68 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    const statusDiv = document.getElementById('status');
+    let lastUploadedUrl = "";
 
-    // الدالة الجديدة للرفع على سيرفر سريع (ImageKit)
-    async function uploadToImageKit(file) {
+    async function uploadSmart(type) {
+        const file = document.getElementById('anyFile').files[0];
+        if (!file) return alert("اختار صورة أولاً!");
+        
+        const status = document.getElementById('status');
+        status.innerText = "⌛ جاري الرفع فوراً.. متقفلش الصفحة";
+        status.className = "loading";
+
         const formData = new FormData();
         formData.append("file", file);
-        formData.append("fileName", file.name);
-        // ده مفتاح عام (Public Key) للسيرفر الجديد
-        formData.append("publicKey", "public_v1_k1R9b/1N4vD7L+6o5uR2mU="); 
+        formData.append("upload_preset", "menu_preset"); // بريسيت مفتوح المساحة
 
         try {
-            const res = await fetch("https://upload.imagekit.io/api/v1/files/upload", {
+            // استخدام سيرفر Cloudinary - الأقوى عالمياً في التعامل مع الصور الكبيرة
+            const res = await fetch("https://api.cloudinary.com/v1_1/dno6v8vub/image/upload", {
                 method: "POST",
                 body: formData
             });
-            const json = await res.json();
-            if(res.ok) {
-                return json.url; // الرابط المباشر
+            const data = await res.json();
+            
+            if (data.secure_url) {
+                lastUploadedUrl = data.secure_url;
+                if (type === 'logo') {
+                    db.ref('restaurant_info').update({ logo: lastUploadedUrl }).then(() => {
+                        status.innerText = "✅ تم تحديث اللوجو بنجاح!";
+                        status.className = "";
+                    });
+                } else {
+                    document.getElementById('itemFields').style.display = "block";
+                    status.innerText = "✅ الصورة اترفع! كمل بيانات الصنف تحت";
+                    status.className = "";
+                }
             } else {
-                return null;
+                throw new Error();
             }
-        } catch (err) {
-            return null;
+        } catch (e) {
+            status.innerText = "❌ السيرفر مشغول، حاول مرة تانية";
+            status.className = "";
         }
     }
 
-    // حفظ النصوص
-    function saveTextData() {
-        const name = document.getElementById('resName').value;
-        const whatsapp = document.getElementById('resWhatsapp').value;
-        statusDiv.innerText = "⏳ جاري حفظ البيانات...";
-        statusDiv.style.color = "#555";
-        db.ref('restaurant_info').update({ name, whatsapp })
-          .then(() => { 
-              statusDiv.innerText = "✅ تم حفظ الاسم والرقم!"; 
-              statusDiv.style.color = "green";
-          });
-    }
-
-    // رفع اللوجو بالسيرفر الجديد
-    async function uploadLogoOnly() {
-        const file = document.getElementById('logoFile').files[0];
-        if (!file) return alert("اختار صورة اللوجو الأول!");
-        
-        statusDiv.innerText = "⏳ جاري رفع اللوجو.. قد يستغرق وقتاً حسب حجم الصورة";
-        statusDiv.style.color = "#555";
-        
-        // جرب نرفع على السيرفر الجديد
-        let url = await uploadToImageKit(file);
-        
-        if (url) {
-            db.ref('restaurant_info').update({ logo: url })
-              .then(() => { 
-                  statusDiv.innerText = "✅ تم تحديث اللوجو بنجاح!"; 
-                  statusDiv.style.color = "green";
-              });
-        } else {
-            statusDiv.innerText = "❌ فشل الرفع، جرب صورة أصغر أو حاول لاحقاً";
-            statusDiv.style.color = "red";
-        }
-    }
-
-    // إضافة صنف مع صورته بالسيرفر الجديد
-    async function uploadAndAddItem() {
+    function finalAddItem() {
         const name = document.getElementById('itemName').value;
         const price = document.getElementById('itemPrice').value;
-        const file = document.getElementById('itemFile').files[0];
+        if(!name || !price) return alert("اكتب الاسم والسعر!");
 
-        if (!name || !price) return alert("اكتب الاسم والسعر!");
+        db.ref('menu_items').push({ name, price, image: lastUploadedUrl }).then(() => {
+            document.getElementById('status').innerText = "✅ الصنف انضاف للمنيو!";
+            document.getElementById('itemFields').style.display = "none";
+            document.getElementById('itemName').value = "";
+            document.getElementById('itemPrice').value = "";
+        });
+    }
 
-        statusDiv.innerText = "⏳ جاري إضافة الصنف...";
-        statusDiv.style.color = "#555";
-        
-        let url = "";
-        if (file) url = await uploadToImageKit(file);
-
-        db.ref('menu_items').push({ name, price, image: url })
-          .then(() => {
-              statusDiv.innerText = "✅ تم إضافة " + name;
-              statusDiv.style.color = "green";
-              document.getElementById('itemName').value = "";
-              document.getElementById('itemPrice').value = "";
-              document.getElementById('itemFile').value = ""; // مسح اختيار الملف
-          });
+    function saveInfo() {
+        const name = document.getElementById('resName').value;
+        const whatsapp = document.getElementById('resWhatsapp').value;
+        db.ref('restaurant_info').update({ name, whatsapp }).then(() => {
+            alert("تم حفظ الاسم والرقم!");
+        });
     }
 </script>
 </body>
