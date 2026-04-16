@@ -3,49 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة التحكم الخارقة</title>
+    <title>لوحة التحكم الاحترافية - النسخة النهائية</title>
     <style>
-        :root { --primary: #000; --accent: #ff4757; --bg: #f1f2f6; }
-        body { font-family: sans-serif; background: var(--bg); padding: 15px; direction: rtl; text-align: center; }
-        .box { background: #fff; max-width: 450px; margin: auto; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .card { background: #fafafa; padding: 15px; border-radius: 15px; border: 2px dashed #ddd; margin-bottom: 20px; }
-        input { width: 100%; padding: 15px; margin: 10px 0; border: 1px solid #ddd; border-radius: 10px; font-size: 16px; box-sizing: border-box; }
-        button { width: 100%; padding: 18px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px; transition: 0.2s; background: var(--primary); color: #fff; }
-        button:active { transform: scale(0.98); }
-        #status { margin-top: 20px; font-weight: bold; padding: 10px; color: #555; border-radius: 8px; }
-        .loading { animation: blink 1s infinite; }
-        @keyframes blink { 50% { opacity: 0.5; } }
+        :root { --p: #2563eb; --s: #10b981; --bg: #f8fafc; }
+        body { font-family: system-ui; background: var(--bg); padding: 15px; direction: rtl; }
+        .box { background: #fff; max-width: 450px; margin: auto; padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+        .section { background: #fff; padding: 15px; border: 1px solid #e2e8f0; border-radius: 15px; margin-bottom: 20px; }
+        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #cbd5e1; border-radius: 10px; box-sizing: border-box; font-size: 15px; }
+        button { width: 100%; padding: 15px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; color: #fff; transition: 0.2s; margin-top: 10px; }
+        .btn-p { background: var(--p); }
+        .btn-s { background: var(--s); }
+        #status { margin-top: 15px; font-weight: bold; text-align: center; color: #64748b; }
+        .img-preview { width: 100px; height: 100px; object-fit: cover; border-radius: 10px; margin: 10px auto; display: none; border: 2px solid #eee; }
     </style>
 </head>
 <body>
 
 <div class="box">
-    <h2 style="color: var(--accent);">🚀 نظام الإدارة الفوري</h2>
+    <h2 style="text-align:center; color:#1e293b;">🚀 لوحة تحكم فورية</h2>
     
-    <div class="card">
+    <div id="status">جاهز للعمل..</div>
+
+    <div class="section">
+        <h3>📍 إعدادات المطعم</h3>
         <input type="text" id="resName" placeholder="اسم المطعم">
         <input type="text" id="resWhatsapp" placeholder="رقم الواتساب">
-        <button onclick="saveInfo()">1. حفظ البيانات الأساسية</button>
+        <label>لوجو المطعم:</label>
+        <input type="file" id="logoFile" accept="image/*" onchange="preview(this, 'p1')">
+        <img id="p1" class="img-preview">
+        <button class="btn-p" onclick="saveSettings()">حفظ اللوجو والبيانات</button>
     </div>
 
-    <div class="card">
-        <label><b>اللوجو أو صورة الصنف</b></label>
-        <input type="file" id="anyFile" accept="image/*">
-        <p style="font-size: 12px; color: #888;">* هيرفع أي صورة مهما كان حجمها</p>
-        
-        <div style="display: flex; gap: 10px;">
-            <button style="background: #2f3542;" onclick="uploadSmart('logo')">تحديث اللوجو</button>
-            <button style="background: #2ed573;" onclick="uploadSmart('item')">إضافة كصنف</button>
-        </div>
-    </div>
-
-    <div id="itemFields" style="display: none;" class="card">
+    <div class="section">
+        <h3>🍔 إضافة صنف جديد</h3>
         <input type="text" id="itemName" placeholder="اسم الأكلة">
         <input type="number" id="itemPrice" placeholder="السعر">
-        <button onclick="finalAddItem()">تأكيد إضافة الصنف</button>
+        <label>صورة الأكلة:</label>
+        <input type="file" id="itemFile" accept="image/*" onchange="preview(this, 'p2')">
+        <img id="p2" class="img-preview">
+        <button class="btn-s" onclick="addItem()">إضافة الصنف للمنيو</button>
     </div>
-
-    <div id="status"></div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
@@ -64,67 +61,82 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    let lastUploadedUrl = "";
-
-    async function uploadSmart(type) {
-        const file = document.getElementById('anyFile').files[0];
-        if (!file) return alert("اختار صورة أولاً!");
-        
-        const status = document.getElementById('status');
-        status.innerText = "⌛ جاري الرفع فوراً.. متقفلش الصفحة";
-        status.className = "loading";
-
-        const formData = new FormData();
-        formData.append("file", file);
-        formData.append("upload_preset", "menu_preset"); // بريسيت مفتوح المساحة
-
-        try {
-            // استخدام سيرفر Cloudinary - الأقوى عالمياً في التعامل مع الصور الكبيرة
-            const res = await fetch("https://api.cloudinary.com/v1_1/dno6v8vub/image/upload", {
-                method: "POST",
-                body: formData
-            });
-            const data = await res.json();
-            
-            if (data.secure_url) {
-                lastUploadedUrl = data.secure_url;
-                if (type === 'logo') {
-                    db.ref('restaurant_info').update({ logo: lastUploadedUrl }).then(() => {
-                        status.innerText = "✅ تم تحديث اللوجو بنجاح!";
-                        status.className = "";
-                    });
-                } else {
-                    document.getElementById('itemFields').style.display = "block";
-                    status.innerText = "✅ الصورة اترفع! كمل بيانات الصنف تحت";
-                    status.className = "";
+    // وظيفة لتحويل الصورة لنص مضغوط عشان تترفع فوراً
+    function processImg(file) {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = (e) => {
+                const img = new Image();
+                img.src = e.target.result;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    const size = 500; // حجم كافي جداً وجودة عالية
+                    let w = img.width, h = img.height;
+                    if (w > h) { h *= size/w; w = size; } else { w *= size/h; h = size; }
+                    canvas.width = w; canvas.height = h;
+                    ctx.drawImage(img, 0, 0, w, h);
+                    resolve(canvas.toDataURL('image/jpeg', 0.6)); // جودة 60% لسرعة البرق
                 }
-            } else {
-                throw new Error();
             }
-        } catch (e) {
-            status.innerText = "❌ السيرفر مشغول، حاول مرة تانية";
-            status.className = "";
-        }
-    }
-
-    function finalAddItem() {
-        const name = document.getElementById('itemName').value;
-        const price = document.getElementById('itemPrice').value;
-        if(!name || !price) return alert("اكتب الاسم والسعر!");
-
-        db.ref('menu_items').push({ name, price, image: lastUploadedUrl }).then(() => {
-            document.getElementById('status').innerText = "✅ الصنف انضاف للمنيو!";
-            document.getElementById('itemFields').style.display = "none";
-            document.getElementById('itemName').value = "";
-            document.getElementById('itemPrice').value = "";
         });
     }
 
-    function saveInfo() {
-        const name = document.getElementById('resName').value;
-        const whatsapp = document.getElementById('resWhatsapp').value;
-        db.ref('restaurant_info').update({ name, whatsapp }).then(() => {
-            alert("تم حفظ الاسم والرقم!");
+    function preview(input, id) {
+        if (input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = (e) => { 
+                const img = document.getElementById(id);
+                img.src = e.target.result;
+                img.style.display = 'block';
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    async function saveSettings() {
+        const status = document.getElementById('status');
+        const file = document.getElementById('logoFile').files[0];
+        status.innerText = "⏳ جاري الحفظ الفوري...";
+        
+        let logoData = "";
+        if(file) logoData = await processImg(file);
+
+        const updates = {
+            name: document.getElementById('resName').value,
+            whatsapp: document.getElementById('resWhatsapp').value
+        };
+        if(logoData) updates.logo = logoData;
+
+        db.ref('restaurant_info').update(updates).then(() => {
+            status.innerText = "✅ تم حفظ البيانات واللوجو!";
+            status.style.color = "green";
+        });
+    }
+
+    async function addItem() {
+        const status = document.getElementById('status');
+        const name = document.getElementById('itemName').value;
+        const price = document.getElementById('itemPrice').value;
+        const file = document.getElementById('itemFile').files[0];
+
+        if(!name || !price) return alert("اكتب الاسم والسعر!");
+        status.innerText = "⏳ جاري إضافة الصنف...";
+
+        let imgData = "";
+        if(file) imgData = await processImg(file);
+
+        db.ref('menu_items').push({
+            name: name,
+            price: price,
+            image: imgData
+        }).then(() => {
+            status.innerText = "✅ انضاف الصنف بنجاح!";
+            status.style.color = "green";
+            document.getElementById('itemName').value = "";
+            document.getElementById('itemPrice').value = "";
+            document.getElementById('p2').style.display = 'none';
         });
     }
 </script>
