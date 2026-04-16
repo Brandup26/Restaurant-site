@@ -3,32 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة التحكم الاحترافية - النسخة النهائية</title>
+    <title>لوحة التحكم النهائية</title>
     <style>
         :root { --p: #2563eb; --s: #10b981; --bg: #f8fafc; }
-        body { font-family: system-ui; background: var(--bg); padding: 15px; direction: rtl; }
+        body { font-family: system-ui; background: var(--bg); padding: 15px; direction: rtl; text-align: center; }
         .box { background: #fff; max-width: 450px; margin: auto; padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
         .section { background: #fff; padding: 15px; border: 1px solid #e2e8f0; border-radius: 15px; margin-bottom: 20px; }
         input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #cbd5e1; border-radius: 10px; box-sizing: border-box; font-size: 15px; }
         button { width: 100%; padding: 15px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; color: #fff; transition: 0.2s; margin-top: 10px; }
         .btn-p { background: var(--p); }
         .btn-s { background: var(--s); }
-        #status { margin-top: 15px; font-weight: bold; text-align: center; color: #64748b; }
-        .img-preview { width: 100px; height: 100px; object-fit: cover; border-radius: 10px; margin: 10px auto; display: none; border: 2px solid #eee; }
+        #status { margin-top: 15px; font-weight: bold; color: #64748b; }
+        .img-preview { width: 120px; height: 120px; object-fit: cover; border-radius: 10px; margin: 10px auto; display: none; border: 2px solid #3b82f6; }
     </style>
 </head>
 <body>
 
 <div class="box">
-    <h2 style="text-align:center; color:#1e293b;">🚀 لوحة تحكم فورية</h2>
-    
-    <div id="status">جاهز للعمل..</div>
+    <h2 style="color:#1e293b;">🚀 إدارة المنيو الفورية</h2>
+    <div id="status">جاهز للإضافة..</div>
 
     <div class="section">
         <h3>📍 إعدادات المطعم</h3>
         <input type="text" id="resName" placeholder="اسم المطعم">
         <input type="text" id="resWhatsapp" placeholder="رقم الواتساب">
-        <label>لوجو المطعم:</label>
+        <label>صورة اللوجو:</label>
         <input type="file" id="logoFile" accept="image/*" onchange="preview(this, 'p1')">
         <img id="p1" class="img-preview">
         <button class="btn-p" onclick="saveSettings()">حفظ اللوجو والبيانات</button>
@@ -41,7 +40,7 @@
         <label>صورة الأكلة:</label>
         <input type="file" id="itemFile" accept="image/*" onchange="preview(this, 'p2')">
         <img id="p2" class="img-preview">
-        <button class="btn-s" onclick="addItem()">إضافة الصنف للمنيو</button>
+        <button class="btn-s" id="addBtn" onclick="addItem()">إضافة الصنف للمنيو</button>
     </div>
 </div>
 
@@ -61,7 +60,7 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // وظيفة لتحويل الصورة لنص مضغوط عشان تترفع فوراً
+    // دالة معالجة الصور (Base64) لضمان الرفع الفوري
     function processImg(file) {
         return new Promise((resolve) => {
             const reader = new FileReader();
@@ -72,12 +71,12 @@
                 img.onload = () => {
                     const canvas = document.createElement('canvas');
                     const ctx = canvas.getContext('2d');
-                    const size = 500; // حجم كافي جداً وجودة عالية
+                    const size = 500; 
                     let w = img.width, h = img.height;
                     if (w > h) { h *= size/w; w = size; } else { w *= size/h; h = size; }
                     canvas.width = w; canvas.height = h;
                     ctx.drawImage(img, 0, 0, w, h);
-                    resolve(canvas.toDataURL('image/jpeg', 0.6)); // جودة 60% لسرعة البرق
+                    resolve(canvas.toDataURL('image/jpeg', 0.6));
                 }
             }
         });
@@ -98,10 +97,8 @@
     async function saveSettings() {
         const status = document.getElementById('status');
         const file = document.getElementById('logoFile').files[0];
-        status.innerText = "⏳ جاري الحفظ الفوري...";
-        
-        let logoData = "";
-        if(file) logoData = await processImg(file);
+        status.innerText = "⏳ جاري حفظ اللوجو...";
+        let logoData = file ? await processImg(file) : null;
 
         const updates = {
             name: document.getElementById('resName').value,
@@ -110,33 +107,39 @@
         if(logoData) updates.logo = logoData;
 
         db.ref('restaurant_info').update(updates).then(() => {
-            status.innerText = "✅ تم حفظ البيانات واللوجو!";
-            status.style.color = "green";
+            status.innerText = "✅ تم حفظ بيانات المطعم!";
         });
     }
 
     async function addItem() {
         const status = document.getElementById('status');
+        const btn = document.getElementById('addBtn');
         const name = document.getElementById('itemName').value;
         const price = document.getElementById('itemPrice').value;
         const file = document.getElementById('itemFile').files[0];
 
-        if(!name || !price) return alert("اكتب الاسم والسعر!");
-        status.innerText = "⏳ جاري إضافة الصنف...";
+        if(!name || !price) return alert("اكتب الاسم والسعر يا هندسة!");
 
-        let imgData = "";
-        if(file) imgData = await processImg(file);
+        btn.disabled = true;
+        status.innerText = "⏳ جاري الرفع فوراً...";
+        
+        let imgData = file ? await processImg(file) : "";
 
         db.ref('menu_items').push({
             name: name,
             price: price,
             image: imgData
         }).then(() => {
-            status.innerText = "✅ انضاف الصنف بنجاح!";
-            status.style.color = "green";
+            status.innerText = "✅ تم إضافة " + name + " للمنيو!";
+            btn.disabled = false;
+            // مسح الخانات بعد الإضافة
             document.getElementById('itemName').value = "";
             document.getElementById('itemPrice').value = "";
+            document.getElementById('itemFile').value = "";
             document.getElementById('p2').style.display = 'none';
+        }).catch(() => {
+            status.innerText = "❌ حدث خطأ، حاول مرة أخرى";
+            btn.disabled = false;
         });
     }
 </script>
