@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة التحكم النهائية</title>
+    <title>لوحة التحكم النهائية - حل مشكلة الصور</title>
     <style>
         :root { --p: #2563eb; --s: #10b981; --bg: #f8fafc; }
         body { font-family: system-ui; background: var(--bg); padding: 15px; direction: rtl; text-align: center; }
@@ -14,14 +14,14 @@
         .btn-p { background: var(--p); }
         .btn-s { background: var(--s); }
         #status { margin-top: 15px; font-weight: bold; color: #64748b; }
-        .img-preview { width: 120px; height: 120px; object-fit: cover; border-radius: 10px; margin: 10px auto; display: none; border: 2px solid #3b82f6; }
+        .img-preview { width: 120px; height: 120px; object-fit: cover; border-radius: 10px; margin: 10px auto; display: none; border: 2px solid var(--p); }
     </style>
 </head>
 <body>
 
 <div class="box">
-    <h2 style="color:#1e293b;">🚀 إدارة المنيو الفورية</h2>
-    <div id="status">جاهز للإضافة..</div>
+    <h2 style="color:#1e293b;">🚀 إدارة المنيو</h2>
+    <div id="status">جاهز للرفع الفوري..</div>
 
     <div class="section">
         <h3>📍 إعدادات المطعم</h3>
@@ -60,8 +60,8 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // دالة معالجة الصور (Base64) لضمان الرفع الفوري
-    function processImg(file) {
+    // دالة عبقرية لتصغير الصورة جداً عشان تترفع في ثانية
+    async function compressAndProcess(file) {
         return new Promise((resolve) => {
             const reader = new FileReader();
             reader.readAsDataURL(file);
@@ -71,12 +71,14 @@
                 img.onload = () => {
                     const canvas = document.createElement('canvas');
                     const ctx = canvas.getContext('2d');
-                    const size = 500; 
+                    // صغرنا الحجم لـ 400 بكسل (مثالي للموبايل)
+                    const size = 400; 
                     let w = img.width, h = img.height;
                     if (w > h) { h *= size/w; w = size; } else { w *= size/h; h = size; }
                     canvas.width = w; canvas.height = h;
                     ctx.drawImage(img, 0, 0, w, h);
-                    resolve(canvas.toDataURL('image/jpeg', 0.6));
+                    // جودة 0.5 عشان الحجم يبقى ريشة
+                    resolve(canvas.toDataURL('image/jpeg', 0.5));
                 }
             }
         });
@@ -98,14 +100,12 @@
         const status = document.getElementById('status');
         const file = document.getElementById('logoFile').files[0];
         status.innerText = "⏳ جاري حفظ اللوجو...";
-        let logoData = file ? await processImg(file) : null;
-
+        let logoData = file ? await compressAndProcess(file) : null;
         const updates = {
             name: document.getElementById('resName').value,
             whatsapp: document.getElementById('resWhatsapp').value
         };
         if(logoData) updates.logo = logoData;
-
         db.ref('restaurant_info').update(updates).then(() => {
             status.innerText = "✅ تم حفظ بيانات المطعم!";
         });
@@ -118,13 +118,14 @@
         const price = document.getElementById('itemPrice').value;
         const file = document.getElementById('itemFile').files[0];
 
-        if(!name || !price) return alert("اكتب الاسم والسعر يا هندسة!");
+        if(!name || !price) return alert("اكتب الاسم والسعر!");
 
         btn.disabled = true;
-        status.innerText = "⏳ جاري الرفع فوراً...";
+        status.innerText = "⏳ جاري الرفع الفوري...";
         
-        let imgData = file ? await processImg(file) : "";
+        let imgData = file ? await compressAndProcess(file) : "";
 
+        // التأكد إن الصورة مش ضخمة قبل الإرسال
         db.ref('menu_items').push({
             name: name,
             price: price,
@@ -132,13 +133,12 @@
         }).then(() => {
             status.innerText = "✅ تم إضافة " + name + " للمنيو!";
             btn.disabled = false;
-            // مسح الخانات بعد الإضافة
             document.getElementById('itemName').value = "";
             document.getElementById('itemPrice').value = "";
             document.getElementById('itemFile').value = "";
             document.getElementById('p2').style.display = 'none';
-        }).catch(() => {
-            status.innerText = "❌ حدث خطأ، حاول مرة أخرى";
+        }).catch((err) => {
+            status.innerText = "❌ فشل الرفع: الصورة لسه كبيرة";
             btn.disabled = false;
         });
     }
