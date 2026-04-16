@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منيو المطعم</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f8f9fa; margin: 0; padding-bottom: 80px; text-align: center; }
+        .header { background: white; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .logo { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 3px solid #1a73e8; }
+        .menu-container { padding: 15px; max-width: 500px; margin: auto; text-align: right; }
+        .item-card { background: white; padding: 15px; border-radius: 12px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .item-info h3 { margin: 0; font-size: 18px; }
+        .price { color: #1a73e8; font-weight: bold; font-size: 16px; }
+        .add-btn { background: #1a73e8; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; }
+        .cart-bar { position: fixed; bottom: 0; width: 100%; background: #1a73e8; color: white; padding: 18px; font-weight: bold; cursor: pointer; display: none; border: none; font-size: 16px; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <img id="displayLogo" class="logo" src="" alt="لوجو">
+    <h1 id="displayName" style="margin-top:10px;">تحميل...</h1>
+</div>
+
+<div class="menu-container" id="menuItems"></div>
+
+<button class="cart-bar" id="cartBar" onclick="sendOrder()">🛒 اطلب عبر واتساب</button>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyAyi3bQqd55atTlULXRTRm5HOuwJthlDaI",
+        authDomain: "restaurant-menu-1bfd7.firebaseapp.com",
+        databaseURL: "https://restaurant-menu-1bfd7-default-rtdb.firebaseio.com",
+        projectId: "restaurant-menu-1bfd7",
+        storageBucket: "restaurant-menu-1bfd7.firebasestorage.app",
+        messagingSenderId: "626018942432",
+        appId: "1:626018942432:web:0e0169b3c071867b713f85"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    let cart = [];
+    let whatsappNum = "";
+
+    // جلب البيانات الأساسية
+    db.ref('restaurant_info').on('value', (s) => {
+        const d = s.val();
+        if(d) {
+            document.getElementById('displayName').innerText = d.name;
+            document.getElementById('displayLogo').src = d.logo;
+            whatsappNum = d.whatsapp;
+        }
+    });
+
+    // جلب المنيو
+    db.ref('menu_items').on('value', (s) => {
+        const div = document.getElementById('menuItems');
+        div.innerHTML = "";
+        s.forEach((c) => {
+            const item = c.val();
+            div.innerHTML += `<div class="item-card">
+                <div class="item-info"><h3>${item.name}</h3><span class="price">${item.price} ج.م</span></div>
+                <button class="add-btn" onclick="addToCart('${item.name}', ${item.price})">إضافة +</button>
+            </div>`;
+        });
+    });
+
+    function addToCart(n, p) {
+        cart.push({n, p});
+        document.getElementById('cartBar').style.display = "block";
+        document.getElementById('cartBar').innerText = `🛒 طلب (${cart.length}) أصناف - أرسل للواتساب`;
+    }
+
+    function sendOrder() {
+        let msg = "طلب جديد:\n";
+        let total = 0;
+        cart.forEach(i => { msg += `- ${i.n} (${i.p} ج.م)\n`; total += i.p; });
+        msg += `\nإجمالي: ${total} ج.م`;
+        window.open(`https://wa.me/${whatsappNum}?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+</script>
+</body>
+</html>
