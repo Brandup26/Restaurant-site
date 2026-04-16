@@ -2,120 +2,88 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>نظام أولاد زكريا المتكامل</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منيو المطعم الاحترافي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #f27e27; --dark: #000000; --card: #151515; }
-        * { box-sizing: border-box; font-family: 'Cairo', sans-serif; margin: 0; padding: 0; }
-        body { background: var(--dark); color: #fff; line-height: 1.6; width: 100%; overflow-x: hidden; }
-
-        /* واجهة الزبون */
-        header { text-align: center; padding: 30px 15px; border-bottom: 3px solid var(--primary); background: #111; }
-        .logo { width: 100px; height: 100px; background: #fff; border-radius: 50%; margin: 0 auto 15px; border: 3px solid var(--primary); overflow: hidden; }
-        .logo img { width: 100%; height: 100%; object-fit: contain; }
-        
-        .section-title { color: var(--primary); margin: 25px 20px 10px; border-right: 5px solid var(--primary); padding-right: 12px; font-size: 20px; font-weight: 900; }
-        .menu-grid { padding: 0 15px; display: grid; gap: 10px; max-width: 600px; margin: auto; }
-        .item { background: var(--card); padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #333; }
-        .price { color: var(--primary); font-weight: 900; font-size: 19px; }
-
-        /* لوحة التحكم - إصلاح العرض بالكامل */
-        .admin { background: #fdfdfd; color: #333; padding: 30px 10px; margin-top: 50px; border-top: 5px solid var(--primary); }
-        .admin-card { max-width: 550px; margin: auto; background: white; padding: 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .admin-section-label { background: #eee; padding: 8px; margin: 15px 0 10px; font-weight: 900; border-radius: 5px; color: var(--primary); text-align: center; }
-        .admin-row { display: grid; grid-template-columns: 1fr 80px; gap: 10px; align-items: center; margin-bottom: 8px; padding-bottom: 5px; border-bottom: 1px solid #f0f0f0; }
-        label { font-size: 13px; font-weight: bold; color: #444; }
-        input { width: 100%; padding: 8px; border: 1.5px solid #ddd; border-radius: 6px; text-align: center; font-weight: bold; font-size: 15px; }
-        .main-input { width: 100%; padding: 12px; margin-bottom: 15px; border: 2px solid var(--primary); border-radius: 10px; font-weight: bold; }
-        .btn-save { background: var(--primary); color: #fff; border: none; padding: 18px; width: 100%; border-radius: 12px; font-weight: 900; font-size: 18px; cursor: pointer; margin-top: 20px; }
+        :root { --primary-color: #e67e22; --dark-bg: #1a1a1a; }
+        body { font-family: 'Cairo', sans-serif; background-color: var(--dark-bg); color: white; margin: 0; padding: 20px; }
+        .header { text-align: center; padding: 30px; background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1514326640560-7d063ef2aed5?auto=format&fit=crop&w=800&q=80'); background-size: cover; border-radius: 15px; margin-bottom: 30px; border-bottom: 4px solid var(--primary-color); }
+        .menu-section { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .menu-item { background: #262626; padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; border-right: 4px solid transparent; }
+        .menu-item:hover { border-right: 4px solid var(--primary-color); background: #333; }
+        .item-info h3 { margin: 0; color: var(--primary-color); }
+        .item-info p { margin: 5px 0 0; font-size: 0.9em; color: #ccc; }
+        .price-tag { background: var(--primary-color); color: white; padding: 5px 15px; border-radius: 20px; font-weight: bold; min-width: 80px; text-align: center; }
     </style>
 </head>
 <body>
 
-    <div id="view">
-        <header>
-            <div class="logo"><img id="vLogo" src="https://via.placeholder.com/100" alt="Logo"></div>
-            <h1 id="vName">أولاد زكريا</h1>
-            <p id="vSlogan" style="color:#888">أصل الكشري والطواجن في مصر</p>
-        </header>
+    <div class="header">
+        <h1>مطعم زكريا</h1>
+        <p>أشهى المأكولات بجودة عالمية</p>
+    </div>
 
-        <h2 class="section-title">قسم الكشري</h2>
-        <div class="menu-grid">
-            <div class="item"><span>كشري النخبة (سوبر)</span><span class="price"><span id="p1">55</span>ج</span></div>
-            <div class="item"><span>كشري القمة (كبير)</span><span class="price"><span id="p2">45</span>ج</span></div>
-            <div class="item"><span>كشري زكريا (وسط)</span><span class="price"><span id="p3">35</span>ج</span></div>
-            <div class="item"><span>كشري عادي (صغير)</span><span class="price"><span id="p4">25</span>ج</span></div>
+    <div class="menu-section">
+        <div class="menu-item">
+            <div class="item-info">
+                <h3>برجر كلاسيك</h3>
+                <p>لحم بقري مشوي، خس، طماطم، صوص خاص</p>
+            </div>
+            <div class="price-tag" id="burger_price">جارِ التحميل...</div>
         </div>
 
-        <h2 class="section-title">قسم الطواجن</h2>
-        <div class="menu-grid">
-            <div class="item"><span>طاجن فراخ ميكس جبن</span><span class="price"><span id="p5">70</span>ج</span></div>
-            <div class="item"><span>طاجن لحمة موزة</span><span class="price"><span id="p6">65</span>ج</span></div>
-            <div class="item"><span>طاجن كبدة إسكندراني</span><span class="price"><span id="p7">55</span>ج</span></div>
-            <div class="item"><span>طاجن سادة بالصلصة</span><span class="price"><span id="p8">30</span>ج</span></div>
+        <div class="menu-item">
+            <div class="item-info">
+                <h3>بيتزا إيطالي</h3>
+                <p>عجينة رقيقة، صلصة طماطم، موزاريلا فريش</p>
+            </div>
+            <div class="price-tag" id="pizza_price">جارِ التحميل...</div>
         </div>
 
-        <h2 class="section-title">الحواوشي والحلويات</h2>
-        <div class="menu-grid">
-            <div class="item"><span>حواوشي دبل جبنة</span><span class="price"><span id="p9">60</span>ج</span></div>
-            <div class="item"><span>حواوشي لحمة بلدي</span><span class="price"><span id="p10">50</span>ج</span></div>
-            <div class="item"><span>أرز بلبن فرن</span><span class="price"><span id="p11">25</span>ج</span></div>
-            <div class="item"><span>مهلبية مكسرات</span><span class="price"><span id="p12">20</span>ج</span></div>
+        <div class="menu-item">
+            <div class="item-info">
+                <h3>باستا فرن</h3>
+                <p>مكرونة بالبشاميل واللحم المفروم</p>
+            </div>
+            <div class="price-tag" id="pasta_price">جارِ التحميل...</div>
         </div>
     </div>
 
-    <div class="admin">
-        <div class="admin-card">
-            <h2 style="text-align:center; color:var(--primary); margin-bottom:20px">⚙️ لوحة الإدارة الشاملة</h2>
-            
-            <label>اسم المطعم:</label>
-            <input type="text" id="eName" class="main-input" value="أولاد زكريا">
-            
-            <label>رقم تليفون المطعم:</label>
-            <input type="tel" id="ePhone" class="main-input" value="01022101718">
-            
-            <label>لوجو المطعم (صورة):</label>
-            <input type="file" accept="image/*" onchange="upLogo(event)" style="margin-bottom:20px; border:none;">
-
-            <div class="admin-section-label">تعديل أسعار الكشري</div>
-            <div class="admin-row"><label>كشري النخبة:</label><input type="number" id="e1" value="55"></div>
-            <div class="admin-row"><label>كشري القمة:</label><input type="number" id="e2" value="45"></div>
-            <div class="admin-row"><label>كشري زكريا:</label><input type="number" id="e3" value="35"></div>
-            <div class="admin-row"><label>كشري عادي:</label><input type="number" id="e4" value="25"></div>
-
-            <div class="admin-section-label">تعديل أسعار الطواجن</div>
-            <div class="admin-row"><label>طاجن فراخ ميكس:</label><input type="number" id="e5" value="70"></div>
-            <div class="admin-row"><label>طاجن لحمة موزة:</label><input type="number" id="e6" value="65"></div>
-            <div class="admin-row"><label>طاجن كبدة:</label><input type="number" id="e7" value="55"></div>
-            <div class="admin-row"><label>طاجن سادة:</label><input type="number" id="e8" value="30"></div>
-
-            <div class="admin-section-label">الحواوشي والحلو</div>
-            <div class="admin-row"><label>حواوشي جبنة:</label><input type="number" id="e9" value="60"></div>
-            <div class="admin-row"><label>حواوشي بلدي:</label><input type="number" id="e10" value="50"></div>
-            <div class="admin-row"><label>أرز بلبن:</label><input type="number" id="e11" value="25"></div>
-            <div class="admin-row"><label>مهلبية:</label><input type="number" id="e12" value="20"></div>
-
-            <button class="btn-save" onclick="save()">حفظ وتحديث كل البيانات ✅</button>
-        </div>
-    </div>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 
     <script>
-        function upLogo(e) {
-            const reader = new FileReader();
-            reader.onload = () => document.getElementById('vLogo').src = reader.result;
-            reader.readAsDataURL(e.target.files[0]);
+        // بيانات الربط الخاصة بمشروعك
+        const firebaseConfig = {
+            apiKey: "AIzaSyAyi3bQqd55atTlULXRTRm5HOuwJthlDaI",
+            authDomain: "restaurant-menu-1bfd7.firebaseapp.com",
+            databaseURL: "https://restaurant-menu-1bfd7-default-rtdb.firebaseio.com",
+            projectId: "restaurant-menu-1bfd7",
+            storageBucket: "restaurant-menu-1bfd7.firebasestorage.app",
+            messagingSenderId: "626018942432",
+            appId: "1:626018942432:web:0e0169b3c071867b713f85"
+        };
+
+        // بدء التشغيل
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // دالة مراقبة الأسعار: أي تغيير في فايربيز هيسمع هنا فوراً
+        function watchPrices() {
+            const pricesRef = database.ref('prices');
+            pricesRef.on('value', (snapshot) => {
+                const prices = snapshot.val();
+                if (prices) {
+                    // تحديث العناصر بناءً على الـ ID
+                    if (prices.burger_price) document.getElementById('burger_price').innerText = prices.burger_price + " LE";
+                    if (prices.pizza_price) document.getElementById('pizza_price').innerText = prices.pizza_price + " LE";
+                    if (prices.pasta_price) document.getElementById('pasta_price').innerText = prices.pasta_price + " LE";
+                }
+            });
         }
-        function save() {
-            // تحديث الاسم
-            document.getElementById('vName').innerText = document.getElementById('eName').value;
-            // تحديث الأسعار (كل الـ 12 صنف)
-            for(let i=1; i<=12; i++) {
-                document.getElementById('p'+i).innerText = document.getElementById('e'+i).value;
-            }
-            alert("تم تحديث المنيو بالكامل! الاسم، التليفون، والأسعار الجديدة جاهزة الآن.");
-            window.scrollTo({top: 0, behavior: 'smooth'});
-        }
+
+        watchPrices();
     </script>
 </body>
 </html>
