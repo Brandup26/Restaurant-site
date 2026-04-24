@@ -3,164 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مطعمنا الفاخر - القائمة</title>
+    <title>أولاد زكريا للكشري</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* الخطوط والألوان */
-        :root {
-            --bg-color: #0f0f0f;
-            --card-bg: #1a1a1a;
-            --gold: #c5a059;
-            --white: #ffffff;
-            --text-grey: #b3b3b3;
-        }
+        :root { --gold: #c5a059; --dark: #121212; --card: #1e1e1e; --white: #fff; }
+        body { font-family: 'Cairo', sans-serif; background-color: var(--dark); color: var(--white); margin: 0; padding: 0; }
+        
+        /* Header & Logo */
+        header { text-align: center; padding: 40px 20px; }
+        .logo { width: 200px; height: 200px; border-radius: 20px; border: 3px solid var(--gold); object-fit: cover; }
+        h1 { color: var(--gold); margin-top: 15px; font-size: 2rem; }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--white);
-            margin: 0;
-            padding: 0;
-        }
+        /* Menu */
+        .container { max-width: 900px; margin: auto; padding: 20px; }
+        .category-title { color: var(--gold); border-right: 4px solid var(--gold); padding-right: 15px; margin: 30px 0; }
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
+        .item { background: var(--card); padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #333; }
+        .add-btn { background: var(--gold); border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
 
-        header {
-            text-align: center;
-            padding: 50px 20px;
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('hero-bg.jpg');
-            background-size: cover;
-        }
+        /* Cart Floating Button */
+        #cart-icon { position: fixed; bottom: 20px; right: 20px; background: var(--gold); padding: 15px 25px; border-radius: 50px; cursor: pointer; font-weight: bold; z-index: 1000; }
 
-        .logo {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            border: 2px solid var(--gold);
-            margin-bottom: 20px;
-        }
-
-        h1 { color: var(--gold); margin: 0; }
-
-        .menu-container {
-            max-width: 1000px;
-            margin: 40px auto;
-            padding: 20px;
-        }
-
-        .category {
-            margin-bottom: 40px;
-        }
-
-        .category-title {
-            color: var(--gold);
-            border-bottom: 2px solid var(--gold);
-            display: inline-block;
-            margin-bottom: 20px;
-            font-size: 1.5rem;
-            padding-bottom: 5px;
-        }
-
-        .menu-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        .item {
-            background: var(--card-bg);
-            padding: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-radius: 8px;
-            transition: 0.3s;
-        }
-
-        .item:hover {
-            border-right: 4px solid var(--gold);
-        }
-
-        .item-name { font-weight: bold; }
-        .item-price { color: var(--gold); font-weight: bold; }
-
-        footer {
-            text-align: center;
-            padding: 40px;
-            border-top: 1px solid #333;
-            color: var(--text-grey);
-        }
+        /* Modal */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; z-index: 2000; }
+        .modal-content { background: var(--card); padding: 30px; border-radius: 15px; width: 90%; max-width: 400px; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: none; box-sizing: border-box; }
+        button.checkout-btn { width: 100%; background: var(--gold); padding: 12px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <header>
         <img src="logo.jpg" alt="Logo" class="logo">
-        <h1>قائمة الطعام الفاخرة</h1>
+        <h1>أولاد زكريا للكشري</h1>
     </header>
 
-    <div class="menu-container">
-        
-        <div class="category">
-            <h2 class="category-title">الكشري</h2>
-            <div class="menu-grid">
-                <div class="item"><span>كشري صغير</span><span class="item-price">25 ج</span></div>
-                <div class="item"><span>كشري جامبو</span><span class="item-price">35 ج</span></div>
-                <div class="item"><span>كشري سبيشيال</span><span class="item-price">45 ج</span></div>
-            </div>
+    <div class="container" id="menu">
         </div>
 
-        <div class="category">
-            <h2 class="category-title">الكشري بالكبدة</h2>
-            <div class="menu-grid">
-                <div class="item"><span>كشري صغير</span><span class="item-price">35 ج</span></div>
-                <div class="item"><span>كشري جامبو</span><span class="item-price">50 ج</span></div>
-                <div class="item"><span>كشري سبيشيال</span><span class="item-price">60 ج</span></div>
-            </div>
-        </div>
+    <div id="cart-icon" onclick="showModal()">🛒 السلة (<span id="cart-count">0</span>)</div>
 
-        <div class="category">
-            <h2 class="category-title">الطواجن</h2>
-            <div class="menu-grid">
-                <div class="item"><span>لحمة مفرومة</span><span class="item-price">35 ج</span></div>
-                <div class="item"><span>طاجن فراخ</span><span class="item-price">45 ج</span></div>
-                <div class="item"><span>لحمة ميكس كبدة</span><span class="item-price">50 ج</span></div>
-                <div class="item"><span>لحمة ميكس كشري</span><span class="item-price">50 ج</span></div>
-                <div class="item"><span>لحمة ميكس</span><span class="item-price">60 ج</span></div>
-                <div class="item"><span>فراخ ميكس كشري</span><span class="item-price">55 ج</span></div>
-                <div class="item"><span>فراخ ميكس كبدة</span><span class="item-price">60 ج</span></div>
-                <div class="item"><span>فراخ ميكس</span><span class="item-price">65 ج</span></div>
-            </div>
+    <div class="modal" id="orderModal">
+        <div class="modal-content">
+            <h3>بيانات التوصيل</h3>
+            <input type="text" id="name" placeholder="الاسم الكريم">
+            <input type="text" id="phone" placeholder="رقم التليفون">
+            <input type="text" id="address" placeholder="العنوان بالتفصيل">
+            <button class="checkout-btn" onclick="sendWhatsApp()">إرسال الطلب عبر واتساب</button>
+            <button onclick="document.getElementById('orderModal').style.display='none'" style="background:none; border:none; color:red; margin-top:10px; width:100%; cursor:pointer;">إغلاق</button>
         </div>
-
-        <div class="category">
-            <h2 class="category-title">السندوتشات والوجبات</h2>
-            <div class="menu-grid">
-                <div class="item"><span>رغيف حواوشي</span><span class="item-price">30 ج</span></div>
-                <div class="item"><span>ساندوتش كبدة</span><span class="item-price">15 ج</span></div>
-                <div class="item"><span>ربع كبدة شرايح (عيش، طحينة، مخلل)</span><span class="item-price">85 ج</span></div>
-            </div>
-        </div>
-
-        <div class="category">
-            <h2 class="category-title">إضافات وحلو</h2>
-            <div class="menu-grid">
-                <div class="item"><span>كبده ع الكشري</span><span class="item-price">15 ج</span></div>
-                <div class="item"><span>تقلية</span><span class="item-price">10 ج</span></div>
-                <div class="item"><span>عدس و حمص</span><span class="item-price">10 ج</span></div>
-                <div class="item"><span>توست</span><span class="item-price">5 ج</span></div>
-                <div class="item"><span>خيار</span><span class="item-price">5 ج</span></div>
-                <div class="item"><span>صلصة</span><span class="item-price">5 ج</span></div>
-                <div class="item"><span>بيبسي</span><span class="item-price">20 ج</span></div>
-                <div class="item"><span>مياه معدنية</span><span class="item-price">7 ج</span></div>
-                <div class="item"><span>أرز باللبن سادة</span><span class="item-price">25 ج</span></div>
-            </div>
-        </div>
-
     </div>
 
-    <footer>
-        <h3>للطلب والاستفسار</h3>
-        <p>010 22 10 1718</p>
-        <p>010 17 14 1158</p>
-    </footer>
+    <script>
+        const menuItems = [
+            { category: "الكشري", items: [{name: "كشري صغير", price: 25}, {name: "كشري جامبو", price: 35}, {name: "كشري سبيشيال", price: 45}] },
+            { category: "الكشري بالكبدة", items: [{name: "كشري صغير", price: 35}, {name: "كشري جامبو", price: 50}, {name: "كشري سبيشيال", price: 60}] },
+            { category: "الطواجن", items: [{name: "لحمة مفرومة", price: 35}, {name: "طاجن فراخ", price: 45}, {name: "لحمة ميكس كبدة", price: 50}, {name: "لحمة ميكس كشري", price: 50}, {name: "لحمة ميكس", price: 60}, {name: "فراخ ميكس كشري", price: 55}, {name: "فراخ ميكس كبدة", price: 60}, {name: "فراخ ميكس", price: 65}] },
+            { category: "السندوتشات والوجبات", items: [{name: "رغيف حواوشي", price: 30}, {name: "ساندوتش كبدة", price: 15}, {name: "ربع كبدة شرايح", price: 85}] },
+            { category: "إضافات وحلو", items: [{name: "كبده ع الكشري", price: 15}, {name: "تقلية", price: 10}, {name: "عدس و حمص", price: 10}, {name: "توست", price: 5}, {name: "خيار", price: 5}, {name: "صلصة", price: 5}, {name: "بيبسي", price: 20}, {name: "مياه معدنية", price: 7}, {name: "أرز باللبن سادة", price: 25}] }
+        ];
 
+        let cart = [];
+
+        function renderMenu() {
+            const container = document.getElementById('menu');
+            menuItems.forEach(cat => {
+                container.innerHTML += `<h2 class="category-title">${cat.category}</h2><div class="menu-grid" id="${cat.category}"></div>`;
+                const grid = document.getElementById(cat.category);
+                cat.items.forEach(item => {
+                    grid.innerHTML += `<div class="item"><span>${item.name} (${item.price} ج)</span><button class="add-btn" onclick="addToCart('${item.name}', ${item.price})">+</button></div>`;
+                });
+            });
+        }
+
+        function addToCart(name, price) {
+            cart.push({name, price});
+            document.getElementById('cart-count').innerText = cart.length;
+            alert("تمت إضافة " + name + " للسلة");
+        }
+
+        function showModal() {
+            if(cart.length === 0) return alert("السلة فارغة!");
+            document.getElementById('orderModal').style.display = 'flex';
+        }
+
+        function sendWhatsApp() {
+            let name = document.getElementById('name').value;
+            let phone = document.getElementById('phone').value;
+            let address = document.getElementById('address').value;
+            
+            if(!name || !phone || !address) return alert("يرجى ملء جميع البيانات");
+
+            let total = cart.reduce((sum, item) => sum + item.price, 0);
+            let orderList = cart.map(i => i.name + " - " + i.price + " ج").join("%0A");
+            
+            let message = `*طلب جديد من مطعم أولاد زكريا*%0A%0A*الطلبات:*%0A${orderList}%0A%0A*الإجمالي:* ${total} ج%0A%0A*بيانات العميل:*%0Aالاسم: ${name}%0Aالتليفون: ${phone}%0Aالعنوان: ${address}`;
+            
+            window.open(`https://wa.me/201022101718?text=${message}`, '_blank');
+        }
+
+        renderMenu();
+    </script>
 </body>
 </html>
