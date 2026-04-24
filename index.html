@@ -3,85 +3,164 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منيو المطعم</title>
+    <title>مطعمنا الفاخر - القائمة</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f8f9fa; margin: 0; padding-bottom: 80px; text-align: center; }
-        .header { background: white; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .logo { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 3px solid #1a73e8; }
-        .menu-container { padding: 15px; max-width: 500px; margin: auto; text-align: right; }
-        .item-card { background: white; padding: 15px; border-radius: 12px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .item-info h3 { margin: 0; font-size: 18px; }
-        .price { color: #1a73e8; font-weight: bold; font-size: 16px; }
-        .add-btn { background: #1a73e8; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; }
-        .cart-bar { position: fixed; bottom: 0; width: 100%; background: #1a73e8; color: white; padding: 18px; font-weight: bold; cursor: pointer; display: none; border: none; font-size: 16px; }
+        /* الخطوط والألوان */
+        :root {
+            --bg-color: #0f0f0f;
+            --card-bg: #1a1a1a;
+            --gold: #c5a059;
+            --white: #ffffff;
+            --text-grey: #b3b3b3;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--white);
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            text-align: center;
+            padding: 50px 20px;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('hero-bg.jpg');
+            background-size: cover;
+        }
+
+        .logo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 2px solid var(--gold);
+            margin-bottom: 20px;
+        }
+
+        h1 { color: var(--gold); margin: 0; }
+
+        .menu-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .category {
+            margin-bottom: 40px;
+        }
+
+        .category-title {
+            color: var(--gold);
+            border-bottom: 2px solid var(--gold);
+            display: inline-block;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            padding-bottom: 5px;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .item {
+            background: var(--card-bg);
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        .item:hover {
+            border-right: 4px solid var(--gold);
+        }
+
+        .item-name { font-weight: bold; }
+        .item-price { color: var(--gold); font-weight: bold; }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            border-top: 1px solid #333;
+            color: var(--text-grey);
+        }
     </style>
 </head>
 <body>
 
-<div class="header">
-    <img id="displayLogo" class="logo" src="" alt="لوجو">
-    <h1 id="displayName" style="margin-top:10px;">تحميل...</h1>
-</div>
+    <header>
+        <img src="logo.jpg" alt="Logo" class="logo">
+        <h1>قائمة الطعام الفاخرة</h1>
+    </header>
 
-<div class="menu-container" id="menuItems"></div>
+    <div class="menu-container">
+        
+        <div class="category">
+            <h2 class="category-title">الكشري</h2>
+            <div class="menu-grid">
+                <div class="item"><span>كشري صغير</span><span class="item-price">25 ج</span></div>
+                <div class="item"><span>كشري جامبو</span><span class="item-price">35 ج</span></div>
+                <div class="item"><span>كشري سبيشيال</span><span class="item-price">45 ج</span></div>
+            </div>
+        </div>
 
-<button class="cart-bar" id="cartBar" onclick="sendOrder()">🛒 اطلب عبر واتساب</button>
+        <div class="category">
+            <h2 class="category-title">الكشري بالكبدة</h2>
+            <div class="menu-grid">
+                <div class="item"><span>كشري صغير</span><span class="item-price">35 ج</span></div>
+                <div class="item"><span>كشري جامبو</span><span class="item-price">50 ج</span></div>
+                <div class="item"><span>كشري سبيشيال</span><span class="item-price">60 ج</span></div>
+            </div>
+        </div>
 
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+        <div class="category">
+            <h2 class="category-title">الطواجن</h2>
+            <div class="menu-grid">
+                <div class="item"><span>لحمة مفرومة</span><span class="item-price">35 ج</span></div>
+                <div class="item"><span>طاجن فراخ</span><span class="item-price">45 ج</span></div>
+                <div class="item"><span>لحمة ميكس كبدة</span><span class="item-price">50 ج</span></div>
+                <div class="item"><span>لحمة ميكس كشري</span><span class="item-price">50 ج</span></div>
+                <div class="item"><span>لحمة ميكس</span><span class="item-price">60 ج</span></div>
+                <div class="item"><span>فراخ ميكس كشري</span><span class="item-price">55 ج</span></div>
+                <div class="item"><span>فراخ ميكس كبدة</span><span class="item-price">60 ج</span></div>
+                <div class="item"><span>فراخ ميكس</span><span class="item-price">65 ج</span></div>
+            </div>
+        </div>
 
-<script>
-    const firebaseConfig = {
-        apiKey: "AIzaSyAyi3bQqd55atTlULXRTRm5HOuwJthlDaI",
-        authDomain: "restaurant-menu-1bfd7.firebaseapp.com",
-        databaseURL: "https://restaurant-menu-1bfd7-default-rtdb.firebaseio.com",
-        projectId: "restaurant-menu-1bfd7",
-        storageBucket: "restaurant-menu-1bfd7.firebasestorage.app",
-        messagingSenderId: "626018942432",
-        appId: "1:626018942432:web:0e0169b3c071867b713f85"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+        <div class="category">
+            <h2 class="category-title">السندوتشات والوجبات</h2>
+            <div class="menu-grid">
+                <div class="item"><span>رغيف حواوشي</span><span class="item-price">30 ج</span></div>
+                <div class="item"><span>ساندوتش كبدة</span><span class="item-price">15 ج</span></div>
+                <div class="item"><span>ربع كبدة شرايح (عيش، طحينة، مخلل)</span><span class="item-price">85 ج</span></div>
+            </div>
+        </div>
 
-    let cart = [];
-    let whatsappNum = "";
+        <div class="category">
+            <h2 class="category-title">إضافات وحلو</h2>
+            <div class="menu-grid">
+                <div class="item"><span>كبده ع الكشري</span><span class="item-price">15 ج</span></div>
+                <div class="item"><span>تقلية</span><span class="item-price">10 ج</span></div>
+                <div class="item"><span>عدس و حمص</span><span class="item-price">10 ج</span></div>
+                <div class="item"><span>توست</span><span class="item-price">5 ج</span></div>
+                <div class="item"><span>خيار</span><span class="item-price">5 ج</span></div>
+                <div class="item"><span>صلصة</span><span class="item-price">5 ج</span></div>
+                <div class="item"><span>بيبسي</span><span class="item-price">20 ج</span></div>
+                <div class="item"><span>مياه معدنية</span><span class="item-price">7 ج</span></div>
+                <div class="item"><span>أرز باللبن سادة</span><span class="item-price">25 ج</span></div>
+            </div>
+        </div>
 
-    // جلب البيانات الأساسية
-    db.ref('restaurant_info').on('value', (s) => {
-        const d = s.val();
-        if(d) {
-            document.getElementById('displayName').innerText = d.name;
-            document.getElementById('displayLogo').src = d.logo;
-            whatsappNum = d.whatsapp;
-        }
-    });
+    </div>
 
-    // جلب المنيو
-    db.ref('menu_items').on('value', (s) => {
-        const div = document.getElementById('menuItems');
-        div.innerHTML = "";
-        s.forEach((c) => {
-            const item = c.val();
-            div.innerHTML += `<div class="item-card">
-                <div class="item-info"><h3>${item.name}</h3><span class="price">${item.price} ج.م</span></div>
-                <button class="add-btn" onclick="addToCart('${item.name}', ${item.price})">إضافة +</button>
-            </div>`;
-        });
-    });
+    <footer>
+        <h3>للطلب والاستفسار</h3>
+        <p>010 22 10 1718</p>
+        <p>010 17 14 1158</p>
+    </footer>
 
-    function addToCart(n, p) {
-        cart.push({n, p});
-        document.getElementById('cartBar').style.display = "block";
-        document.getElementById('cartBar').innerText = `🛒 طلب (${cart.length}) أصناف - أرسل للواتساب`;
-    }
-
-    function sendOrder() {
-        let msg = "طلب جديد:\n";
-        let total = 0;
-        cart.forEach(i => { msg += `- ${i.n} (${i.p} ج.م)\n`; total += i.p; });
-        msg += `\nإجمالي: ${total} ج.م`;
-        window.open(`https://wa.me/${whatsappNum}?text=${encodeURIComponent(msg)}`, '_blank');
-    }
-</script>
 </body>
 </html>
