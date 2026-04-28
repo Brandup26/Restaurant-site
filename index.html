@@ -53,8 +53,8 @@
         async function initMenu() {
             const container = document.getElementById('menu');
             try {
-                // استخدام corsproxy.io للتحميل
-                const response = await fetch('https://corsproxy.io/?' + encodeURIComponent(csvUrl));
+                // وسيط قوي للاتصال
+                const response = await fetch('https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(csvUrl));
                 if (!response.ok) throw new Error("فشل الاتصال بملف البيانات");
                 
                 const data = await response.text();
