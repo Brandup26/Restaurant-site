@@ -4,29 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>أولاد زكريا للكشري</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#c5a059">
+    <link rel="apple-touch-icon" href="logo.jpg">
+    
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root { --gold: #c5a059; --dark: #121212; --card: #1e1e1e; --white: #fff; }
-        
         body { font-family: 'Cairo', sans-serif; background-color: var(--dark); color: var(--white); margin: 0; padding: 0; padding-bottom: 150px; }
-        
         header { text-align: center; padding: 40px 20px; }
         .logo { width: 200px; height: 200px; border-radius: 20px; border: 3px solid var(--gold); object-fit: cover; }
         h1 { color: var(--gold); margin-top: 15px; font-size: 2rem; }
-        
         .container { max-width: 900px; margin: auto; padding: 20px; }
-        
         .category-title { color: var(--gold); border-right: 4px solid var(--gold); padding-right: 15px; margin: 30px 0; }
         .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
         .item { background: var(--card); padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #333; }
         .add-btn { background: var(--gold); border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        
         #cart-icon { position: fixed; bottom: 20px; right: 20px; background: var(--gold); color: black; padding: 15px 25px; border-radius: 50px; cursor: pointer; font-weight: bold; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; z-index: 2000; }
         .modal-content { background: var(--card); padding: 30px; border-radius: 15px; width: 90%; max-width: 400px; }
         input { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: none; box-sizing: border-box; }
         button.checkout-btn { width: 100%; background: var(--gold); padding: 12px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        
         footer { text-align: center; padding: 20px; border-top: 1px solid #333; margin-top: 40px; }
         .address-title { color: var(--gold); font-weight: bold; margin-bottom: 10px; }
         .address-item { color: #ccc; margin-bottom: 5px; }
@@ -63,6 +61,13 @@
     </div>
 
     <script>
+        // PWA Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js');
+            });
+        }
+
         const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSn6BL0A5IgV6qIS2p6lAvYx8VNcTD_0f2WMiBgQJV9uDtEbHUH8Ok_eiJt0xdNiMIKh8FPhCWTF9LP/pub?output=csv';
         let cart = [];
         let totalSum = 0;
@@ -72,21 +77,16 @@
             try {
                 const response = await fetch('https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(csvUrl));
                 if (!response.ok) throw new Error("فشل الاتصال بملف البيانات");
-                
                 const data = await response.text();
                 const rows = data.split('\n').slice(1);
-                
                 let menuData = [];
                 rows.forEach(row => {
                     const cols = row.split(',');
                     if (cols.length < 3) return;
-                    
                     const category = cols[0].trim();
                     const name = cols[1].trim();
                     const price = parseInt(cols[2].trim());
-                    
                     if (!category || !name || isNaN(price)) return;
-
                     let catObj = menuData.find(c => c.category === category);
                     if (!catObj) {
                         catObj = { category: category, items: [] };
