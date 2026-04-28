@@ -7,13 +7,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root { --gold: #c5a059; --dark: #121212; --card: #1e1e1e; --white: #fff; }
-        body { font-family: 'Cairo', sans-serif; background-color: var(--dark); color: var(--white); margin: 0; padding: 0; }
+        
+        /* التعديل هنا: زودنا padding-bottom للجسم كله عشان الصفحة تطلع لفوق براحتها */
+        body { font-family: 'Cairo', sans-serif; background-color: var(--dark); color: var(--white); margin: 0; padding: 0; padding-bottom: 120px; }
+        
         header { text-align: center; padding: 40px 20px; }
         .logo { width: 200px; height: 200px; border-radius: 20px; border: 3px solid var(--gold); object-fit: cover; }
         h1 { color: var(--gold); margin-top: 15px; font-size: 2rem; }
         
-        /* هنا زودنا المسافة تحت عشان السلة متغطيش على حاجة */
-        .container { max-width: 900px; margin: auto; padding: 20px; padding-bottom: 150px; }
+        .container { max-width: 900px; margin: auto; padding: 20px; }
         
         .category-title { color: var(--gold); border-right: 4px solid var(--gold); padding-right: 15px; margin: 30px 0; }
         .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
@@ -26,7 +28,7 @@
         input { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: none; box-sizing: border-box; }
         button.checkout-btn { width: 100%; background: var(--gold); padding: 12px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
         
-        footer { text-align: center; padding: 20px; border-top: 1px solid #333; margin-top: 20px; }
+        footer { text-align: center; padding: 20px; border-top: 1px solid #333; margin-top: 40px; }
         .address { color: #ccc; margin-bottom: 10px; }
         .designer { color: var(--gold); font-weight: bold; font-size: 0.9rem; }
     </style>
