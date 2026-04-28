@@ -11,18 +11,22 @@
         header { text-align: center; padding: 40px 20px; }
         .logo { width: 200px; height: 200px; border-radius: 20px; border: 3px solid var(--gold); object-fit: cover; }
         h1 { color: var(--gold); margin-top: 15px; font-size: 2rem; }
-        .container { max-width: 900px; margin: auto; padding: 20px; padding-bottom: 80px; }
+        
+        /* هنا زودنا المسافة تحت عشان السلة متغطيش على حاجة */
+        .container { max-width: 900px; margin: auto; padding: 20px; padding-bottom: 150px; }
+        
         .category-title { color: var(--gold); border-right: 4px solid var(--gold); padding-right: 15px; margin: 30px 0; }
         .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
         .item { background: var(--card); padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #333; }
         .add-btn { background: var(--gold); border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        
         #cart-icon { position: fixed; bottom: 20px; right: 20px; background: var(--gold); color: black; padding: 15px 25px; border-radius: 50px; cursor: pointer; font-weight: bold; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; z-index: 2000; }
         .modal-content { background: var(--card); padding: 30px; border-radius: 15px; width: 90%; max-width: 400px; }
         input { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: none; box-sizing: border-box; }
         button.checkout-btn { width: 100%; background: var(--gold); padding: 12px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        /* تصميم الفوتر */
-        footer { text-align: center; padding: 40px 20px; border-top: 1px solid #333; margin-top: 50px; }
+        
+        footer { text-align: center; padding: 20px; border-top: 1px solid #333; margin-top: 20px; }
         .address { color: #ccc; margin-bottom: 10px; }
         .designer { color: var(--gold); font-weight: bold; font-size: 0.9rem; }
     </style>
