@@ -4,107 +4,149 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>كشري أولاد زكريا</title>
+
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="logo.jpg">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#121212">
     <link rel="manifest" href="manifest.json">
+    
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    
     <style>
         :root { --gold: #c5a059; --dark: #121212; --card: #1e1e1e; --white: #fff; }
-        body { font-family: 'Cairo', sans-serif; background-color: var(--dark); color: var(--white); margin: 0; padding-bottom: 100px; }
-        header { text-align: center; padding: 30px; }
-        .logo { width: 120px; height: 120px; border-radius: 50%; border: 3px solid var(--gold); }
-        .container { max-width: 800px; margin: auto; padding: 15px; }
-        .category-title { color: var(--gold); border-right: 4px solid var(--gold); padding-right: 10px; margin: 20px 0; }
-        .item { background: var(--card); padding: 15px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border: 1px solid #333; }
-        .add-btn { background: var(--gold); border: none; padding: 5px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; }
-        #cart-icon { position: fixed; bottom: 20px; left: 20px; right: 20px; background: var(--gold); color: black; padding: 15px; border-radius: 10px; text-align: center; font-weight: bold; z-index: 1000; cursor: pointer; }
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); justify-content: center; align-items: center; z-index: 2000; }
-        .modal-content { background: var(--card); padding: 20px; border-radius: 15px; width: 85%; }
-        input { width: 100%; padding: 12px; margin: 8px 0; border-radius: 5px; border: 1px solid #444; background: #222; color: white; box-sizing: border-box; }
-        .checkout-btn { width: 100%; background: var(--gold); padding: 12px; border: none; border-radius: 5px; font-weight: bold; margin-top: 10px; }
+        body { font-family: 'Cairo', sans-serif; background-color: var(--dark); color: var(--white); margin: 0; padding: 0; padding-bottom: 150px; }
+        header { text-align: center; padding: 40px 20px; }
+        .logo { width: 150px; height: 150px; border-radius: 20px; border: 3px solid var(--gold); object-fit: cover; }
+        h1 { color: var(--gold); margin-top: 15px; font-size: 1.8rem; }
+        .container { max-width: 900px; margin: auto; padding: 20px; }
+        .category-title { color: var(--gold); border-right: 4px solid var(--gold); padding-right: 15px; margin: 30px 0; }
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
+        .item { background: var(--card); padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #333; }
+        .add-btn { background: var(--gold); border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        #cart-icon { position: fixed; bottom: 20px; right: 20px; background: var(--gold); color: black; padding: 15px 25px; border-radius: 50px; cursor: pointer; font-weight: bold; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; z-index: 2000; }
+        .modal-content { background: var(--card); padding: 30px; border-radius: 15px; width: 90%; max-width: 400px; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #444; background: #2a2a2a; color: white; box-sizing: border-box; }
+        button.checkout-btn { width: 100%; background: var(--gold); padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        footer { text-align: center; padding: 20px; border-top: 1px solid #333; margin-top: 40px; }
+        .designer { color: var(--gold); font-weight: bold; font-size: 0.8rem; margin-top: 20px; opacity: 0.7; }
     </style>
 </head>
 <body>
 
     <header>
-        <img src="logo.jpg" class="logo">
-        <h1 style="color:var(--gold)">أولاد زكريا</h1>
+        <img src="logo.jpg" alt="Logo" class="logo">
+        <h1>أولاد زكريا للكشري</h1>
     </header>
 
-    <div class="container" id="menu">جاري التحميل...</div>
+    <div class="container" id="menu">جاري تحميل القائمة...</div>
 
-    <div id="cart-icon" onclick="openOrderModal()">🛒 عرض السلة والطلب (<span id="cart-total">0</span> ج)</div>
+    <footer>
+        <p style="color:var(--gold)">📍 فروعنا:</p>
+        <p>أبو المطامير - كوبري خميس</p>
+        <p>أبو المطامير - قبل كوبري الحيار</p>
+        <p class="designer">Designed by Eng / Anas Gaber Shehata</p>
+    </footer>
+
+    <div id="cart-icon" onclick="showModal()">🛒 السلة: <span id="cart-total">0 ج</span></div>
 
     <div class="modal" id="orderModal">
         <div class="modal-content">
-            <h3 style="color:var(--gold)">بيانات التوصيل</h3>
+            <h3>بيانات التوصيل</h3>
             <input type="text" id="name" placeholder="الاسم">
             <input type="text" id="phone" placeholder="رقم التليفون">
-            <input type="text" id="address" placeholder="العنوان">
-            <button class="checkout-btn" onclick="sendWhatsApp()">إرسال واتساب 💬</button>
-            <button onclick="closeOrderModal()" style="background:none; border:none; color:grey; width:100%; margin-top:15px;">إغلاق</button>
+            <input type="text" id="address" placeholder="العنوان بالتفصيل">
+            <button class="checkout-btn" onclick="sendWhatsApp()">إرسال الطلب عبر واتساب</button>
+            <button onclick="closeModal()" style="background:none; border:none; color:#ff4444; margin-top:15px; width:100%; cursor:pointer;">إغلاق النافذة</button>
         </div>
     </div>
 
     <script>
         const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSn6BL0A5IgV6qIS2p6lAvYx8VNcTD_0f2WMiBgQJV9uDtEbHUH8Ok_eiJt0xdNiMIKh8FPhCWTF9LP/pub?output=csv';
         let cart = [];
-        let total = 0;
+        let totalSum = 0;
 
-        // --- الحل النهائي والقطعي لزرار الرجوع ---
-        function openOrderModal() {
+        // --- التحكم في زرار الرجوع ---
+        function showModal() {
             if(cart.length === 0) return alert("السلة فارغة!");
             document.getElementById('orderModal').style.display = 'flex';
-            // بنضيف "كلمة" في الرابط عشان المتصفح يحس إنه دخل صفحة جديدة
-            window.location.hash = "order"; 
+            window.location.hash = "cart"; // إضافة كلمة للرابط عشان زرار الرجوع يشتغل
         }
 
-        function closeOrderModal() {
+        function closeModal() {
             document.getElementById('orderModal').style.display = 'none';
-            if(window.location.hash === "#order") {
-                history.replaceState(null, null, " "); // بنشيل الكلمة من الرابط
+            if(window.location.hash === "#cart") {
+                history.replaceState(null, null, " "); // مسح الكلمة من الرابط
             }
         }
 
-        // لو المستخدم داس زرار الرجوع بتاع الموبايل
+        // مراقبة زرار الرجوع بتاع الموبايل
         window.onhashchange = function() {
-            if (!window.location.hash || window.location.hash !== "#order") {
+            if (!window.location.hash || window.location.hash !== "#cart") {
                 document.getElementById('orderModal').style.display = 'none';
             }
         };
-        // ---------------------------------------
 
-        async function init() {
-            try {
-                const res = await fetch('https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(csvUrl));
-                const text = await res.text();
-                const rows = text.split('\n').slice(1);
-                let html = '';
-                rows.forEach(row => {
-                    const [cat, name, price] = row.split(',');
-                    if(name) html += `<div class="item"><span>${name} (${price} ج)</span><button class="add-btn" onclick="add('${name}',${price})">+</button></div>`;
-                });
-                document.getElementById('menu').innerHTML = html;
-            } catch (e) { document.getElementById('menu').innerHTML = "خطأ في التحميل"; }
+        // تسجيل السيرفس وركر للـ PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js'); });
         }
 
-        function add(n, p) {
-            cart.push({n, p});
-            total += parseInt(p);
-            document.getElementById('cart-total').innerText = total;
+        async function initMenu() {
+            const container = document.getElementById('menu');
+            try {
+                const response = await fetch('https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(csvUrl));
+                const data = await response.text();
+                const rows = data.split('\n').slice(1);
+                let menuData = [];
+                rows.forEach(row => {
+                    const cols = row.split(',');
+                    if (cols.length < 3) return;
+                    const category = cols[0].trim();
+                    const name = cols[1].trim();
+                    const price = parseInt(cols[2].trim());
+                    let catObj = menuData.find(c => c.category === category);
+                    if (!catObj) {
+                        catObj = { category: category, items: [] };
+                        menuData.push(catObj);
+                    }
+                    catObj.items.push({ name: name, price: price });
+                });
+                renderMenu(menuData);
+            } catch (e) { container.innerHTML = "خطأ في التحميل"; }
+        }
+
+        function renderMenu(menuItems) {
+            const container = document.getElementById('menu');
+            container.innerHTML = ""; 
+            menuItems.forEach(cat => {
+                container.innerHTML += `<h2 class="category-title">${cat.category}</h2><div class="menu-grid" id="${cat.category}"></div>`;
+                const grid = document.getElementById(cat.category);
+                cat.items.forEach(item => {
+                    grid.innerHTML += `<div class="item"><span>${item.name} (${item.price} ج)</span><button class="add-btn" onclick="addToCart('${item.name}', ${item.price})">+</button></div>`;
+                });
+            });
+        }
+
+        function addToCart(name, price) {
+            cart.push({name, price});
+            totalSum += price;
+            document.getElementById('cart-total').innerText = totalSum + " ج";
         }
 
         function sendWhatsApp() {
-            const n = document.getElementById('name').value;
-            const p = document.getElementById('phone').value;
-            const a = document.getElementById('address').value;
-            if(!n || !p || !a) return alert("اكمل البيانات");
-            let msg = `طلب جديد:%0A` + cart.map(i => i.n).join('%0A') + `%0Aالإجمالي: ${total} ج%0Aالاسم: ${n}%0Aالعنوان: ${a}`;
-            window.open(`https://wa.me/201003800314?text=${msg}`);
+            let name = document.getElementById('name').value;
+            let phone = document.getElementById('phone').value;
+            let address = document.getElementById('address').value;
+            if(!name || !phone || !address) return alert("يرجى ملء جميع البيانات");
+            let orderList = cart.map(i => i.name + " - " + i.price + " ج").join("%0A");
+            let message = `*طلب جديد من مطعم أولاد زكريا*%0A%0A*الطلبات:*%0A${orderList}%0A%0A*الإجمالي:* ${totalSum} ج%0A%0A*بيانات العميل:*%0Aالاسم: ${name}%0Aالتليفون: ${phone}%0Aالعنوان: ${address}`;
+            window.open(`https://wa.me/201003800314?text=${message}`, '_blank');
         }
 
-        init();
+        initMenu();
     </script>
 </body>
 </html>
