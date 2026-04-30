@@ -8,7 +8,17 @@
     <link rel="apple-touch-icon" href="logo.jpg">
     <link rel="manifest" href="manifest.json">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
-    <style>
+  .category-header {
+    background: linear-gradient(90deg, var(--gold), transparent);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin: 25px 0 15px 0;
+    font-size: 1.4rem;
+    border-right: 5px solid white;
+    text-align: right;
+}
+  <style>
         :root { --gold: #c5a059; --dark: #121212; --card: #1e1e1e; --white: #fff; }
         body { font-family: 'Cairo', sans-serif; background-color: var(--dark); color: var(--white); margin: 0; padding-bottom: 100px; overflow-x: hidden; }
         header { text-align: center; padding: 20px; }
@@ -42,7 +52,19 @@
         <h1 style="color:var(--gold)">أولاد زكريا</h1>
     </header>
 
-    <div class="container" id="menu">جاري التحميل...</div>
+    <<div class="container" id="menu">
+    <section class="menu-section active" id="koshary-sec">
+        <h2 class="category-header">🍱 قسم الكشري</h2>
+        <div id="list-koshary" class="menu-grid">
+            </div>
+    </section>
+
+    <section class="menu-section" id="sandwiches-sec">
+        <h2 class="category-header">🥪 قسم السندوتشات</h2>
+        <div id="list-sandwiches" class="menu-grid">
+            </div>
+    </section>
+</div>
 
     <div id="cart-icon" onclick="openOrderModal()">🛒 إتمام الطلب (<span id="cart-total">0</span> ج)</div>
 
@@ -110,4 +132,9 @@
         init();
     </script>
 </body>
+       <footer style="text-align: center; padding: 20px; border-top: 1px solid #333; margin-top: 50px; background: #000;">
+    <p style="color: white; margin-bottom: 5px;">جميع الحقوق محفوظة - مطعم TOSTA</p>
+    <p style="color: var(--gold); font-size: 0.9rem; font-weight: bold;">تصميم وبرمجة: [اسمك هنا]</p>
+</footer>
+ 
 </html>
